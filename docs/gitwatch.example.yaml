@@ -1,0 +1,36 @@
+# Static commit message to use for all commits
+commit_message: "Update notes"
+
+# Path to executable script that generates commit messages.
+# The path can be absolute or relative to the repository.
+# The script is executed with the repository as working directory
+# and must output the message to stdout.
+commit_message_script: "gitwatch.sh"
+
+# Whether to automatically commit any existing changes on start
+commit_on_start: true
+
+# Number of seconds to wait before processing multiple changes to the same file.
+# Higher values reduce commit frequency but group more changes together.
+debounce_seconds: 1
+
+# Run without performing actual Git operations (staging, committing, etc.)
+dry_run: false
+
+# Regular expression pattern for files to exclude from watching.
+# Matches are performed against repository-relative file paths.
+# Note: the .git folder & gitignored files are ignored by default.
+# Example: "\.tmp$" to ignore temporary files.
+ignore_regex: null
+
+# Name of the remote to push to (if specified)
+# Example: "origin"
+remote: null
+
+# Number of retry attempts when errors occur.
+# Use -1 for infinite retries.
+retries: 3
+
+# Enable continuous monitoring of filesystem changes.
+# Set to false for one-time commit of current changes.
+watch: true
