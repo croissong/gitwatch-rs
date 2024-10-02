@@ -1,0 +1,42 @@
+[package]
+name = "gitwatch-rs"
+version = "1.0.0"
+authors = ["jan.moeller0@pm.me"]
+repository = "https://github.com/croissong/gitwatch-rs"
+keywords = ["git", "autocommit"]
+license-file = "LICENSE"
+readme = "README.md"
+description = "CLI to watch a git repo and automatically commit changes"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.89"
+clap = { version = "4.5.18", features = ["derive"] }
+clap_complete = "4.5.38"
+fern = { version = "0.7.0", features = ["colored"]}
+figment = { version = "0.10.19", features = ["env", "yaml"] }
+git2 = "0.19.0"
+ignore = "0.4.23"
+indoc = "2.0.5"
+log = "0.4.22"
+notify-debouncer-full = "0.4.0"
+paris = { version = "1.5", features = ["macros", "no_logger"] }
+regex = "1.11.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_regex = "1.1.0"
+shellexpand = "3.1.0"
+
+[dev-dependencies]
+assert_cmd = "2.0.16"
+predicates = "3.1.2"
+rand = "0.8.5"
+tempfile = "3.13.0"
+testresult = "0.4.1"
+
+[lib]
+name = "gitwatch_rs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "gitwatch"
+path = "src/main.rs"
