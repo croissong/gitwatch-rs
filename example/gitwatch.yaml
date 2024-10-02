@@ -1,0 +1,2 @@
+commit_message_script: gitwatch.sh
+debounce_seconds: 3

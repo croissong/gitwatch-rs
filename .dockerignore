@@ -1,0 +1,7 @@
+*
+!/Cargo.lock
+!/Cargo.toml
+!/src
+!/xtask
+!/LICENSE
+!/README.md
