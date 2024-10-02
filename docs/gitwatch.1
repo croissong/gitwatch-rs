@@ -1,0 +1,67 @@
+.ie \n(.g .ds Aq \(aq
+.el .ds Aq '
+.TH gitwatch-rs 1  "gitwatch-rs " 
+.SH NAME
+gitwatch\-rs
+.SH SYNOPSIS
+\fBgitwatch\-rs\fR [\fB\-m\fR|\fB\-\-commit\-message\fR] [\fB\-\-commit\-message\-script\fR] [\fB\-\-commit\-on\-start\fR] [\fB\-\-debounce\-seconds\fR] [\fB\-\-dry\-run\fR] [\fB\-i\fR|\fB\-\-ignore\-regex\fR] [\fB\-\-log\-level\fR] [\fB\-r\fR|\fB\-\-remote\fR] [\fB\-\-retries\fR] [\fB\-w\fR|\fB\-\-watch\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPOSITORY\fR] 
+.SH DESCRIPTION
+.SH OPTIONS
+.TP
+\fB\-m\fR, \fB\-\-commit\-message\fR=\fIMESSAGE\fR
+Static commit message to use for all commits
+.TP
+\fB\-\-commit\-message\-script\fR=\fISCRIPT\fR
+Path to executable script that generates commit messages.
+The path can be absolute or relative to the repository.
+The script is executed with the repository as working directory
+and must output the message to stdout.
+.TP
+\fB\-\-commit\-on\-start\fR=\fICOMMIT_ON_START\fR [default: true]
+Automatically commit any existing changes on start
+.br
+
+.br
+[\fIpossible values: \fRtrue, false]
+.TP
+\fB\-\-debounce\-seconds\fR=\fIDEBOUNCE_SECONDS\fR [default: 1]
+Number of seconds to wait before processing multiple changes to the same file.
+Higher values reduce commit frequency but group more changes together.
+.TP
+\fB\-\-dry\-run\fR
+Run without performing actual Git operations (staging, committing, etc.)
+.TP
+\fB\-i\fR, \fB\-\-ignore\-regex\fR=\fIIGNORE_REGEX\fR
+Regular expression pattern for files to exclude from watching.
+Matches are performed against repository\-relative file paths.
+Note: the .git folder & gitignored files are ignored by default.
+Example: "\\.tmp$" to ignore temporary files.
+.TP
+\fB\-\-log\-level\fR=\fILOG_LEVEL\fR [default: info]
+Set the log level
+.br
+
+.br
+[\fIpossible values: \fRtrace, debug, info, warn, error]
+.TP
+\fB\-r\fR, \fB\-\-remote\fR=\fIREMOTE\fR
+Name of the remote to push to (if specified).
+Example: "origin".
+.TP
+\fB\-\-retries\fR=\fIRETRIES\fR [default: 3]
+Number of retry attempts when errors occur.
+Use \-1 for infinite retries.
+.TP
+\fB\-w\fR, \fB\-\-watch\fR=\fIWATCH\fR [default: true]
+Enable continuous monitoring of filesystem changes.
+Set to false for one\-time commit of current changes.
+.br
+
+.br
+[\fIpossible values: \fRtrue, false]
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print help
+.TP
+[\fIREPOSITORY\fR] [default: .]
+Path to the Git repository to monitor for changes
