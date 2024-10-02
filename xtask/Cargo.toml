@@ -1,0 +1,8 @@
+[package]
+name = "xtask"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.4", features = ["derive"] }
+clap_mangen = "0.2"
+gitwatch-rs = { path = ".." }
