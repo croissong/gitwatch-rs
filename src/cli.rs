@@ -7,7 +7,10 @@ use regex::Regex;
 use serde::Deserialize;
 
 #[derive(Parser)]
-#[command(about = "CLI to watch a git repo and automatically commit changes")]
+#[command(
+    name = "gitwatch",
+    about = "CLI to watch a git repo and automatically commit changes"
+)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
