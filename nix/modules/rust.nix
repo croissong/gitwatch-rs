@@ -26,24 +26,30 @@
           buildInputs = with pkgs; [
             openssl
           ];
-        };
 
+          nativeBuildInputs = with pkgs; [
+            pkg-config
+            installShellFiles
+          ];
+
+          postInstall = ''
+            if [ -f "$out/bin/gitwatch" ]; then
+              installShellCompletion --cmd gitwatch \
+                --bash <($out/bin/gitwatch completion bash) \
+                --fish <($out/bin/gitwatch completion fish) \
+                --zsh <($out/bin/gitwatch completion zsh)
+
+              installManPage docs/gitwatch.1
+            fi
+          '';
+
+          meta = {
+            description = "Watch a Git repository and automatically commit changes";
+            mainProgram = "gitwatch";
+          };
+        };
       };
-      packages.default = self'.packages.gitwatch-rs.overrideAttrs (oa: {
-        nativeBuildInputs = oa.nativeBuildInputs ++ [ pkgs.installShellFiles ];
-        postInstall = ''
-          installShellCompletion --cmd gitwatch \
-            --bash <($out/bin/gitwatch completion bash) \
-            --fish <($out/bin/gitwatch completion fish) \
-            --zsh <($out/bin/gitwatch completion zsh)
 
-          installManPage docs/gitwatch.1
-        '';
-
-        meta = {
-          description = "Watch a Git repository and automatically commit changes";
-          mainProgram = "gitwatch";
-        };
-      });
+      packages.default = self'.packages.gitwatch-rs;
     };
 }
