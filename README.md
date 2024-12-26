@@ -35,10 +35,9 @@ gitwatch watch /path/to/repo --commit-message "Auto commit"
 <details>
 <summary><b>Example use case</b></summary>
 
-I use the tool to watch my notes and automatically 
-
-in action:
-asciicinema
+I use the tool to watch my local notes repository and generate commit messages using [aichat](https://github.com/sigoden/aichat).  
+The [example/](example/) folder contains a small repository demonstrating this use case:
+<img src="docs/example.png" alt="Example use case">
 
 </details>
 
@@ -100,7 +99,15 @@ See [docs/gitwatch.example.yaml](docs/gitwatch.example.yaml) for reference.
 
 On **Nix**:
 
-TODO
+TODO: via flake
+
+On **Archlinux**:
+```
+```
+
+On **Ubuntu**:
+```
+```
 
 Using **cargo**:
 
@@ -113,6 +120,8 @@ Using the **Docker** image:
 ```sh
 docker run ghcr.io/croissong/gitwatch-rs:latest
 ```
+
+I can create packages for other distributions if requested! 
 
 
 #### Shell completion
