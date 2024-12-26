@@ -35,10 +35,9 @@ gitwatch watch /path/to/repo --commit-message "Auto commit"
 <details>
 <summary><b>Example use case</b></summary>
 
-I use the tool to watch my notes and automatically 
-
-in action:
-asciicinema
+I use the tool to watch my local notes repository and generate commit messages using [aichat](https://github.com/sigoden/aichat).  
+The [example/](example/) folder contains a small repository demonstrating this use case:
+<img src="docs/example.png" alt="Example use case">
 
 </details>
 
@@ -98,40 +97,90 @@ See [docs/gitwatch.example.yaml](docs/gitwatch.example.yaml) for reference.
 **[Precompiled binaries are available for Linux and macOS.](https://github.com/croissong/gitwatch-rs/releases)**
 
 
-On **Nix**:
+<details>
+<summary>
 
-TODO
+#### Nix
 
-Using **cargo**:
+</summary>
+A [flake.nix](./flake.nix) is available for Nix
+</details>
 
+
+<details>
+
+<summary>
+
+#### Archlinux
+
+</summary>
+```
+```
+</details>
+
+
+<details>
+<summary>
+
+#### Ubuntu
+
+</summary>
+*TODO*
+</details>
+
+
+<details>
+<summary>
+
+#### Cargo
+
+</summary>
+Install from [crates.io](https://crates.io/crates/gitwatch-rs):
 ```sh
 cargo install commitlint-rs
 ```
+</details>
 
-Using the **Docker** image:
 
+<details>
+<summary>
+
+#### Docker
+
+</summary>
+A **Docker** image is available on the [GitHub Registry](https://github.com/croissong/gitwatch-rs/pkgs/container/gitwatch-rs):
 ```sh
 docker run ghcr.io/croissong/gitwatch-rs:latest
 ```
+</details>
+ 
 
 
-#### Shell completion
+### Shell completion
 
 Shell completion scripts for `bash`, `zsh`, `fish` & more can be generated via
-```
+```sh
 gitwatch completion <SHELL>
 ```
 
 ## Credits
 
 This is a Rust implementation of the original [gitwatch](https://github.com/gitwatch/gitwatch) bash script.  
-**Additional features:**
-- `--commit-message-script`
-- `--retries`
-- `--dry-run`
-- `--commit-on-start`
-
+Thanks to @asd for the idea and the 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.  
 See [CONTRIBUTING.md](CONTRIBUTING.md) for some development hints.
+
+
+## Tips
+
+Disable gpg commit signing via local gitconfig:
+```config
+```
+
+### TODO
+--one-time ionstead of watch flag (removed?)
+https://github.com/goreleaser/nfpm?tab=readme-ov-file
+
+cancel debounce when changes are empty
