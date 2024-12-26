@@ -114,10 +114,10 @@ impl AppConfig {
 
         match (&self.commit_message, &self.commit_message_script) {
             (None, None) => {
-                bail!("Either commit_message or commit_message_script must be set")
+                bail!("Either commit-message or commit-message-script must be set")
             }
             (Some(_), Some(_)) => {
-                bail!("Only one of commit_message or commit_message_script can be set")
+                bail!("Only one of commit-message or commit-message-script can be set")
             }
             (None, Some(script_path)) => {
                 if !script_path.exists() {
@@ -265,7 +265,7 @@ mod tests {
                 .validate()
                 .unwrap_err()
                 .to_string(),
-            "Either commit_message or commit_message_script must be set"
+            "Either commit-message or commit-message-script must be set"
         );
 
         let config_with_both_commit_message_options = AppConfig {
@@ -278,7 +278,7 @@ mod tests {
                 .validate()
                 .unwrap_err()
                 .to_string(),
-            "Only one of commit_message or commit_message_script can be set"
+            "Only one of commit-message or commit-message-script can be set"
         );
 
         let valid_config_with_script = AppConfig {
