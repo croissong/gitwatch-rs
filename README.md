@@ -35,10 +35,9 @@ gitwatch watch /path/to/repo --commit-message "Auto commit"
 <details>
 <summary><b>Example use case</b></summary>
 
-I use the tool to watch my notes and automatically 
-
-in action:
-asciicinema
+I use the tool to watch my local notes repository and generate commit messages using [aichat](https://github.com/sigoden/aichat).  
+The [example/](example/) folder contains a small repository demonstrating this use case:
+<img src="docs/example.png" alt="Example use case">
 
 </details>
 
@@ -100,19 +99,32 @@ See [docs/gitwatch.example.yaml](docs/gitwatch.example.yaml) for reference.
 
 On **Nix**:
 
-TODO
+TODO: via flake
 
-Using **cargo**:
+<details><summary>**Archlinux**</summary>
+```
+```
+</details>
 
+<details><summary>**Ubuntu**</summary>
+*TODO*
+
+<details><summary>**Cargo**</summary>
+Install from [crates.io](https://crates.io/crates/gitwatch-rs):
 ```sh
 cargo install commitlint-rs
 ```
+</details>
 
-Using the **Docker** image:
+
+<details><summary>**Docker**</summary>
+A **Docker** image is available on dockerhub & quai:
 
 ```sh
 docker run ghcr.io/croissong/gitwatch-rs:latest
 ```
+</details>
+ 
 
 
 #### Shell completion
