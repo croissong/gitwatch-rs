@@ -117,7 +117,6 @@ fn test_gitignore() -> TestResult {
     test_repo.write_file(IGNORED_FILE_NAME, TEST_FILE_CONTENT)?;
     let runner = AppRunner::run(app);
 
-    thread::sleep(Duration::from_millis(500));
     test_repo.write_file(IGNORED_FILE_NAME, TEST_FILE_CONTENT)?;
     thread::sleep(Duration::from_millis(500));
     runner.shutdown()?;
@@ -140,7 +139,6 @@ fn test_ignore_regex() -> TestResult {
     test_repo.write_file("bar.txt", TEST_FILE_CONTENT)?;
     let runner = AppRunner::run(app);
 
-    thread::sleep(Duration::from_millis(500));
     test_repo.write_file("bar.txt", TEST_FILE_CONTENT)?;
     thread::sleep(Duration::from_millis(500));
     runner.shutdown()?;
