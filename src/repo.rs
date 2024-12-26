@@ -55,7 +55,7 @@ impl GitwatchRepo {
     pub fn process_changes(&self) -> Result<()> {
         let has_staged_changes = self.stage_changes().context("Failed to stage changes")?;
         if !has_staged_changes {
-            debug!("No changes found that need to be committed");
+            debug!("Working tree clean");
             return Ok(());
         }
 
