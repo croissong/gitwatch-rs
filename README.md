@@ -13,6 +13,7 @@ A Rust implementation of the original [gitwatch](https://github.com/gitwatch/git
 - [Features](#features)
 - [Usage](#usage)
   - [Configuration](#configuration)
+  - [Tips](#tips)
 - [Installation](#installation)
 - [Contributing](#contributing)
 - [Credits](#credits)
@@ -35,10 +36,9 @@ gitwatch watch /path/to/repo --commit-message "Auto commit"
 <details>
 <summary><b>Example use case</b></summary>
 
-I use the tool to watch my notes and automatically 
-
-in action:
-asciicinema
+I use the tool to watch my local notes repository and generate commit messages using [aichat](https://github.com/sigoden/aichat).  
+The [example/](example/) folder contains a small repository demonstrating this use case:
+<img src="docs/example.png" alt="Example use case">
 
 </details>
 
@@ -93,45 +93,88 @@ Options:
 Most options can alternatively be configured in a `gitwatch.yml` file inside the watched repository.
 See [docs/gitwatch.example.yaml](docs/gitwatch.example.yaml) for reference.
 
+
+### Tips
+
+<details><summary><b>Disable gpg commit signing for your watched repo</b></summary>
+
+If you've enabled `gpgsign` globally, you might want to disable it for the watched repositories, since `gitwatch` uses your regular git user to create the commits.
+
+1. add an include to a custom `.gitconfig` file to your local gitconfig:
+   ```sh
+   # cd /path/to/repo 
+   git config --local include.path ../.gitconfig
+   ```
+2. create a .gitconfig file (which can be commited)
+   ```config
+   [commit]
+     gpgsign = false
+   ```
+
+</details>
+
+
 ## Installation
 
 **[Precompiled binaries are available for Linux and macOS.](https://github.com/croissong/gitwatch-rs/releases)**
 
 
-On **Nix**:
+<details><summary><b>Nix</b></summary>
 
-TODO
+A [flake.nix](./flake.nix) is available for Nix.
 
-Using **cargo**:
+</details>
 
+
+<details><summary><b>Archlinux</b></summary>
+
+```sh
+```
+
+</details>
+
+
+<details><summary><b>Ubuntu</b></summary>
+
+*TODO*
+
+</details>
+
+
+<details><summary><b>Cargo</b></summary>
+
+Install from [crates.io](https://crates.io/crates/gitwatch-rs):
 ```sh
 cargo install commitlint-rs
 ```
 
-Using the **Docker** image:
+</details>
 
+
+<details><summary><b>Docker</b></summary>
+
+A **Docker** image is available on the [GitHub Registry](https://github.com/croissong/gitwatch-rs/pkgs/container/gitwatch-rs):
 ```sh
 docker run ghcr.io/croissong/gitwatch-rs:latest
 ```
 
+</details>
+ 
 
-#### Shell completion
+
+### Shell completion
 
 Shell completion scripts for `bash`, `zsh`, `fish` & more can be generated via
-```
+```sh
 gitwatch completion <SHELL>
 ```
 
 ## Credits
 
 This is a Rust implementation of the original [gitwatch](https://github.com/gitwatch/gitwatch) bash script.  
-**Additional features:**
-- `--commit-message-script`
-- `--retries`
-- `--dry-run`
-- `--commit-on-start`
-
+Thanks to @asd for the idea and the 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.  
 See [CONTRIBUTING.md](CONTRIBUTING.md) for some development hints.
+
