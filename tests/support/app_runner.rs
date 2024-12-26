@@ -1,4 +1,4 @@
-use std::thread;
+use std::{thread, time::Duration};
 
 use anyhow::{bail, Result};
 use gitwatch_rs::app::App;
@@ -13,6 +13,7 @@ impl AppRunner {
         let (tx, rx) = std::sync::mpsc::channel();
         let handle = thread::spawn(move || {
             app.run(Some(rx))?;
+            thread::sleep(Duration::from_millis(500));
             Ok(())
         });
 
