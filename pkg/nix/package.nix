@@ -25,6 +25,7 @@
         crane.args = {
           buildInputs = with pkgs; [
             openssl
+            libgit2
           ];
 
           nativeBuildInputs = with pkgs; [
@@ -46,6 +47,8 @@
           meta = {
             description = "Watch a Git repository and automatically commit changes";
             mainProgram = "gitwatch";
+            homepage = "https://github.com/croissong/gitwatch-rs";
+            license = lib.licenses.mit;
           };
         };
       };
