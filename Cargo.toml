@@ -15,11 +15,11 @@ clap = { version = "4.5.18", features = ["derive"] }
 clap_complete = "4.5.38"
 fern = { version = "0.7.0", features = ["colored"]}
 figment = { version = "0.10.19", features = ["env", "yaml"] }
-git2 = "0.19.0"
+git2 = "0.20.2"
 ignore = "0.4.23"
 indoc = "2.0.5"
 log = "0.4.22"
-notify-debouncer-full = "0.4.0"
+notify-debouncer-full = "0.5.0"
 paris = { version = "1.5", features = ["macros", "no_logger"] }
 regex = "1.11.0"
 serde = { version = "1.0", features = ["derive"] }
@@ -29,7 +29,7 @@ shellexpand = "3.1.0"
 [dev-dependencies]
 assert_cmd = "2.0.16"
 predicates = "3.1.2"
-rand = "0.8.5"
+rand = "0.9.1"
 tempfile = "3.13.0"
 testresult = "0.4.1"
 
