@@ -1,7 +1,6 @@
 # Maintainer: Jan Möller <jan.moeller0@pm.me>
 
 pkgname=gitwatch-rs
-pkgver=1.0.0
 pkgrel=1
 pkgdesc="CLI to watch a git repo and automatically commit changes"
 arch=('x86_64')
@@ -46,4 +45,10 @@ package() {
 
   # Install license
   install -Dm644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  printf '%s' "$(cargo version | cut -d' ' -f2)"
 }
