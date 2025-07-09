@@ -1,17 +1,19 @@
-{ inputs, ... }:
+{ ... }:
 {
   perSystem =
     {
-      config,
       self',
       pkgs,
       lib,
       ...
     }:
     let
-      libPath = lib.makeLibraryPath [
-        pkgs.openssl
-      ];
+      libPath =
+        with pkgs;
+        lib.makeLibraryPath [
+          openssl
+          libgit2
+        ];
     in
     {
 
