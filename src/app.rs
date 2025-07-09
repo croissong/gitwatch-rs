@@ -71,7 +71,7 @@ impl App {
             .collect::<Vec<_>>()
             .join("\n");
 
-        debug!("Detected changes:\n{}", formatted_paths);
+        debug!("Detected changes:\n{formatted_paths}");
     }
 }
 
