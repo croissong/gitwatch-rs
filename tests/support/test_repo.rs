@@ -18,6 +18,7 @@ use super::{IGNORED_FILE_NAME, TEST_COMMIT_MESSAGE, TEST_FILE_NAME};
 
 pub struct TestRepo {
     pub dir: TempDir,
+    pub _remote_dir: TempDir,
     pub remote: Repository,
     pub repo: Repository,
 }
@@ -25,11 +26,17 @@ pub struct TestRepo {
 impl TestRepo {
     pub fn new() -> Result<Self> {
         let dir = tempfile::tempdir()?;
+        let remote_dir = tempfile::tempdir()?;
         let repo = Repository::init(dir.path())?;
-        let remote = Self::create_remote(&repo)?;
+        let remote = Self::create_remote(&repo, &remote_dir)?;
 
         // keep references to temp dir to avoid auto cleanup
-        let test_repo = TestRepo { dir, repo, remote };
+        let test_repo = TestRepo {
+            dir,
+            _remote_dir: remote_dir,
+            repo,
+            remote,
+        };
         test_repo.setup_git_config()?;
         test_repo.create_initial_commit()?;
         Ok(test_repo)
@@ -163,8 +170,7 @@ impl TestRepo {
         Ok(Path::new(".gitignore"))
     }
 
-    fn create_remote(repo: &Repository) -> Result<Repository> {
-        let remote_dir = tempfile::tempdir()?;
+    fn create_remote(repo: &Repository, remote_dir: &TempDir) -> Result<Repository> {
         let remote_path = remote_dir.path();
         let remote_repo = Repository::init_bare(remote_path)?;
         repo.remote("origin", &remote_path.to_string_lossy())?;
