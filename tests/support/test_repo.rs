@@ -68,6 +68,7 @@ impl TestRepo {
         OpenOptions::new()
             .write(true)
             .create(true)
+            .truncate(true)
             .mode(0o755)
             .open(&script_path)?
             .write_all(format!("#!/bin/sh\n{content}").as_bytes())?;
@@ -102,19 +103,12 @@ impl TestRepo {
             .map(|(i, _)| i)
             .collect();
 
-        assert!(
-            false,
-            "Timeout waiting for commits. Expected {} commit(s) with message '{}' and changes, found {} commits (empty commits at indices: {:?})",
-            expected_count,
-            expected_message,
-            last_count,
-            empty_commits
+        panic!(
+            "Timeout waiting for commits. Expected {expected_count} commit(s) with message '{expected_message}' and changes, found {last_count} commits (empty commits at indices: {empty_commits:?})"
         );
-
-        unreachable!()
     }
 
-    fn get_commits_with_message(&self, message: &str) -> Result<Vec<git2::Commit>> {
+    fn get_commits_with_message(&self, message: &str) -> Result<Vec<git2::Commit<'_>>> {
         let head = self.repo.head()?.peel_to_commit()?;
 
         // Collect matching commits into a Vec
@@ -171,8 +165,8 @@ impl TestRepo {
 
     fn create_remote(repo: &Repository) -> Result<Repository> {
         let remote_dir = tempfile::tempdir()?;
-        let remote_path = remote_dir.into_path();
-        let remote_repo = Repository::init_bare(&remote_path)?;
+        let remote_path = remote_dir.path();
+        let remote_repo = Repository::init_bare(remote_path)?;
         repo.remote("origin", &remote_path.to_string_lossy())?;
         Ok(remote_repo)
     }

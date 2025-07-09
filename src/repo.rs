@@ -109,7 +109,7 @@ impl GitwatchRepo {
             {}
           ", commit_message, staged_files.join("\n")
         });
-        info!("{}", log_message);
+        info!("{log_message}");
         warn!("Changes will not be commited (dry-run enabled)!");
         Ok(())
     }
@@ -196,7 +196,7 @@ impl GitwatchRepo {
         Ok(oid)
     }
 
-    fn get_statuses(&self) -> Result<git2::Statuses> {
+    fn get_statuses(&self) -> Result<git2::Statuses<'_>> {
         let mut options = StatusOptions::new();
         options.include_ignored(false);
         options.include_untracked(true);
@@ -235,7 +235,7 @@ impl GitwatchRepo {
     }
 
     fn push_changes(&self, remote_name: &str) -> Result<()> {
-        debug!("Pushing to remote {}", remote_name);
+        debug!("Pushing to remote {remote_name}");
         let mut remote = self.git_repo.find_remote(remote_name)?;
 
         const BRANCH_ERROR: &str = "Failed to get current branch name";
@@ -247,12 +247,12 @@ impl GitwatchRepo {
             .ok_or_else(|| anyhow!(BRANCH_ERROR))?
             .to_string();
 
-        let refspec = format!("HEAD:refs/heads/{}", branch_name);
-        trace!("Pushing refspec: {}", refspec);
+        let refspec = format!("HEAD:refs/heads/{branch_name}");
+        trace!("Pushing refspec: {refspec}");
 
         // push current branch
         remote.push(&[&refspec], None)?;
-        info!("Pushed changes to {}", remote_name);
+        info!("Pushed changes to {remote_name}");
         Ok(())
     }
 
@@ -301,8 +301,8 @@ mod tests {
         let temp_dir = tempfile::tempdir()?;
         let repo = Repository::init(&temp_dir)?;
         let remote_dir = tempfile::tempdir()?;
-        let remote_path = remote_dir.into_path();
-        let _ = Repository::init_bare(&remote_path)?;
+        let remote_path = remote_dir.path();
+        let _ = Repository::init_bare(remote_path)?;
         repo.remote("origin", &remote_path.to_string_lossy())?;
         Ok(temp_dir)
     }
@@ -322,8 +322,7 @@ mod tests {
         let err_str = result.err().unwrap().to_string();
         assert!(
             err_str.contains("could not find repository"),
-            "Expected error about missing repository, got: {}",
-            err_str
+            "Expected error about missing repository, got: {err_str}"
         );
         Ok(())
     }
@@ -362,8 +361,7 @@ mod tests {
         let err_str = result.err().unwrap().to_string();
         assert!(
             err_str.contains("Remote 'nonexistent-remote' not found"),
-            "Expected error about missing remote, got: {}",
-            err_str
+            "Expected error about missing remote, got: {err_str}"
         );
         Ok(())
     }
@@ -413,8 +411,7 @@ mod tests {
         let err = result.unwrap_err().to_string();
         assert!(
             err.contains("Failed to get current branch name"),
-            "Unexpected error message: {}",
-            err
+            "Unexpected error message: {err}"
         );
 
         Ok(())
