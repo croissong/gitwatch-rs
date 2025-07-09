@@ -124,8 +124,7 @@ mod tests {
         let err = format!("{:#}", result.unwrap_err());
         assert!(
             err.contains("invalid type"),
-            "Unexpected error message: {}",
-            err
+            "Unexpected error message: {err}"
         );
 
         Ok(())

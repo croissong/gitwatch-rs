@@ -13,7 +13,7 @@ use log::error;
 
 fn main() {
     if let Err(e) = run() {
-        error!("{:?}", e);
+        error!("{e:?}");
         process::exit(1);
     }
 }
