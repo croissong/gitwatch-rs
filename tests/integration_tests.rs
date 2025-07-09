@@ -242,8 +242,7 @@ fn test_push_invalid_remote() -> TestResult {
     let err = format!("{:#}", result.unwrap_err());
     assert!(
         err.contains(&format!("Failed to push to remote '{TEST_REMOTE}'")),
-        "Unexpected error message: {}",
-        err
+        "Unexpected error message: {err}"
     );
 
     Ok(())

@@ -33,7 +33,7 @@ impl AppConfig {
         Ok(config)
     }
 
-    // merge with precedence: Config File > CLI flags
+    // merge with precedence: config file > cli flags
     fn merge_configs(
         repository: PathBuf,
         cli_config: CliOptions,
