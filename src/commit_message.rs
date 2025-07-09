@@ -21,7 +21,8 @@ pub fn generate_commit_message(script_path: &Path, repo_path: &Path) -> Result<S
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
         bail!(
-            "Commit message script failed with exit code {}.\nError: {}",
+            "Commit message script '{}' failed with exit code {}.\nError: {}",
+            script_path.display(),
             output.status,
             stderr
         );
@@ -36,7 +37,7 @@ pub fn generate_commit_message(script_path: &Path, repo_path: &Path) -> Result<S
     }
 
     if let Some(first_line) = trimmed_message.lines().next() {
-        debug!("Generated commit message: '{}'", first_line);
+        debug!("Generated commit message: '{first_line}'");
     }
 
     Ok(commit_message)
@@ -60,7 +61,7 @@ mod tests {
         let script_content = "echo 'Test commit message'";
         let script_path = create_test_script(&temp_dir, script_content)?;
 
-        let result = generate_commit_message(&script_path, &temp_dir.path())?;
+        let result = generate_commit_message(&script_path, temp_dir.path())?;
         assert_eq!(result.trim(), "Test commit message");
         Ok(())
     }
@@ -72,7 +73,7 @@ mod tests {
         let script_content = "echo $PWD";
         let script_path = create_test_script(&temp_dir, script_content)?;
 
-        let result = generate_commit_message(&script_path, &temp_dir.path())?;
+        let result = generate_commit_message(&script_path, temp_dir.path())?;
         assert_eq!(
             result.trim(),
             temp_dir.path().canonicalize()?.display().to_string()
@@ -87,7 +88,7 @@ mod tests {
         let script_content = "exit 1";
         let script_path = create_test_script(&temp_dir, script_content)?;
 
-        let result = generate_commit_message(&script_path, &temp_dir.path());
+        let result = generate_commit_message(&script_path, temp_dir.path());
         assert!(result
             .unwrap_err()
             .to_string()
@@ -111,7 +112,7 @@ mod tests {
         let script_content = "echo ''";
         let script_path = create_test_script(&temp_dir, script_content)?;
 
-        let result = generate_commit_message(&script_path, &temp_dir.path());
+        let result = generate_commit_message(&script_path, temp_dir.path());
         assert!(result
             .unwrap_err()
             .to_string()
@@ -126,7 +127,7 @@ mod tests {
         let script_content = "echo '   \n  \t  '";
         let script_path = create_test_script(&temp_dir, script_content)?;
 
-        let result = generate_commit_message(&script_path, &temp_dir.path());
+        let result = generate_commit_message(&script_path, temp_dir.path());
         assert!(result
             .unwrap_err()
             .to_string()
@@ -139,6 +140,7 @@ mod tests {
         OpenOptions::new()
             .write(true)
             .create(true)
+            .truncate(true)
             .mode(0o755)
             .open(&script_path)?
             .write_all(format!("#!/bin/sh\n{content}").as_bytes())?;

@@ -58,7 +58,7 @@ impl FileWatcher {
                 Ok(received) => match received {
                     Ok(events) => {
                         if let Err(e) = self.handle_events(events, &on_change, &is_path_ignored) {
-                            error!("All retry attempts failed: {}", e);
+                            error!("All retry attempts failed: {e}");
                             return Err(e);
                         }
                     }
@@ -82,7 +82,7 @@ impl FileWatcher {
         F: Fn(&Vec<PathBuf>) -> Result<()>,
         P: Fn(&Path) -> bool,
     {
-        trace!("Received notify events {{ events {:?} }}", events);
+        trace!("Received notify events {{ events {events:?} }}");
         let paths: Vec<_> = events
             .iter()
             .filter(|event| !matches!(event.kind, EventKind::Access(_) | EventKind::Other))
@@ -150,8 +150,7 @@ mod tests {
 
         assert!(
             err.contains("Failed to watch path"),
-            "Unexpected error message: {}",
-            err
+            "Unexpected error message: {err}"
         );
 
         Ok(())
