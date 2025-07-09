@@ -23,7 +23,7 @@ pub fn setup_logger(level: LogLevel) -> Result<()> {
         .format(move |out, message, record| {
             let level = &record.level();
             let color = colors_line.get_color(level).to_fg_str();
-            let color_prefix = format!("\x1B[{color}m", color = color);
+            let color_prefix = format!("\x1B[{color}m");
             const COLOR_SUFFIX: &str = "\x1B[0m";
             let level_prefix = if level == &Level::Info {
                 "".to_string()
@@ -31,11 +31,7 @@ pub fn setup_logger(level: LogLevel) -> Result<()> {
                 format!("[{level}] ", level = level.to_string().to_lowercase())
             };
             out.finish(format_args!(
-                "{color_prefix}{level_prefix}{message}{COLOR_SUFFIX}",
-                color_prefix = color_prefix,
-                level_prefix = level_prefix,
-                message = message,
-                COLOR_SUFFIX = COLOR_SUFFIX
+                "{color_prefix}{level_prefix}{message}{COLOR_SUFFIX}"
             ));
         })
         .level(filter_level)
