@@ -17,6 +17,7 @@ A Rust implementation of the original [gitwatch](https://github.com/gitwatch/git
 - [Installation](#installation)
 - [Contributing](#contributing)
 - [Credits](#credits)
+- [Contributing](#contributing)
 
 ## Features
 
@@ -29,15 +30,15 @@ A Rust implementation of the original [gitwatch](https://github.com/gitwatch/git
 ## Usage
 
 Basic usage:
-```bash
+```sh
 gitwatch watch /path/to/repo --commit-message "Auto commit"
 ```
 
 <details>
 <summary><b>Example use case</b></summary>
 
-I use the tool to watch my local notes repository and generate commit messages using [aichat](https://github.com/sigoden/aichat).  
-The [example/](example/) folder contains a small repository demonstrating this use case:
+I use gitwatch to watch my local notes repository and generate commit messages using [aichat](https://github.com/sigoden/aichat).  
+The [example](example/) folder contains a small repository demonstrating this use case:
 <img src="docs/example.png" alt="Example use case">
 
 </details>
@@ -70,7 +71,7 @@ Options:
           Run without performing actual Git operations (staging, committing, etc.)
   -i, --ignore-regex <IGNORE_REGEX>
           Regular expression pattern for files to exclude from watching.
-          Matches are performed against repository-relative file paths.
+          Matching is performed against repository-relative file paths.
           Note: the .git folder & gitignored files are ignored by default.
           Example: "\.tmp$" to ignore temporary files.
       --log-level <LOG_LEVEL>
@@ -96,17 +97,17 @@ See [docs/gitwatch.example.yaml](docs/gitwatch.example.yaml) for reference.
 
 ### Tips
 
-<details><summary><b>Disable gpg commit signing for your watched repo</b></summary>
+<details><summary><b>Disable GPG commit signing for your watched repo</b></summary>
 
 If you've enabled `gpgsign` globally, you might want to disable it for the watched repositories, since `gitwatch` uses your regular git user to create the commits.
 
-1. add an include to a custom `.gitconfig` file to your local gitconfig:
+1. Add an include to a custom `.gitconfig` file to your local gitconfig:
    ```sh
    # cd /path/to/repo 
    git config --local include.path ../.gitconfig
    ```
-2. create a .gitconfig file (which can be commited)
-   ```config
+ 2. Create a .gitconfig file (which can be committed):
+   ```gitconfig
    [commit]
      gpgsign = false
    ```
@@ -116,19 +117,24 @@ If you've enabled `gpgsign` globally, you might want to disable it for the watch
 
 ## Installation
 
-**[Precompiled binaries are available for Linux and macOS.](https://github.com/croissong/gitwatch-rs/releases)**
-
-
 <details><summary><b>Nix</b></summary>
 
-A [flake.nix](./flake.nix) is available for Nix.
+A [flake.nix](./flake.nix) is available for Nix:
+```nix
+  inputs = {
+    gitwatch-rs.url = "github:croissong/gitwatch-rs";
+  };
+  # Reference the package as `inputs.gitwatch-rs.packages.<system>.default`
+}
+```
 
 </details>
 
 
-<details><summary><b>Archlinux</b></summary>
+<details><summary><b>Arch Linux</b></summary>
 
 ```sh
+# TODO: Add AUR package installation instructions
 ```
 
 </details>
@@ -136,7 +142,9 @@ A [flake.nix](./flake.nix) is available for Nix.
 
 <details><summary><b>Ubuntu</b></summary>
 
-*TODO*
+```sh
+# TODO: Add Ubuntu package installation instructions
+```
 
 </details>
 
@@ -145,7 +153,7 @@ A [flake.nix](./flake.nix) is available for Nix.
 
 Install from [crates.io](https://crates.io/crates/gitwatch-rs):
 ```sh
-cargo install commitlint-rs
+cargo install gitwatch-rs
 ```
 
 </details>
@@ -153,10 +161,17 @@ cargo install commitlint-rs
 
 <details><summary><b>Docker</b></summary>
 
-A **Docker** image is available on the [GitHub Registry](https://github.com/croissong/gitwatch-rs/pkgs/container/gitwatch-rs):
+Docker images are published to the [ghcr.io/croissong/gitwatch-rs](https://github.com/croissong/gitwatch-rs/pkgs/container/gitwatch-rs):
 ```sh
-docker run ghcr.io/croissong/gitwatch-rs:latest
+docker run -v /path/to/repo:/repo ghcr.io/croissong/gitwatch-rs:latest /repo
 ```
+
+</details>
+
+
+<details><summary><b>Binaries</b></summary>
+
+Precompiled binaries are available for Linux and macOS from [releases](https://github.com/croissong/gitwatch-rs/releases).
 
 </details>
  
@@ -164,7 +179,7 @@ docker run ghcr.io/croissong/gitwatch-rs:latest
 
 ### Shell completion
 
-Shell completion scripts for `bash`, `zsh`, `fish` & more can be generated via
+Shell completion scripts for `bash`, `zsh`, `fish` & more can be generated via:
 ```sh
 gitwatch completion <SHELL>
 ```
@@ -172,9 +187,9 @@ gitwatch completion <SHELL>
 ## Credits
 
 This is a Rust implementation of the original [gitwatch](https://github.com/gitwatch/gitwatch) bash script.  
-Thanks to @asd for the idea and the 
+ 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.  
-See [CONTRIBUTING.md](CONTRIBUTING.md) for some development hints.
+Contributions are welcome! Feel free to submit a Pull Request.  
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development hints.
 

@@ -1,3 +1,7 @@
+[working-directory: 'example']
+run:
+  cargo run -- watch . --log-level=debug
+
 clippy:
   cargo clippy --tests --fix --allow-dirty --allow-staged
 

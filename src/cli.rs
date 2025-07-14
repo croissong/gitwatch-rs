@@ -52,7 +52,7 @@ pub struct CliOptions {
     pub dry_run: bool,
 
     /// Regular expression pattern for files to exclude from watching.
-    /// Matches are performed against repository-relative file paths.
+    /// Matching is performed against repository-relative file paths.
     /// Note: the .git folder & gitignored files are ignored by default.
     /// Example: "\.tmp$" to ignore temporary files.
     #[clap(short = 'i', long = "ignore-regex", verbatim_doc_comment)]

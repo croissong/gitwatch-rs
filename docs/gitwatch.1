@@ -1,10 +1,10 @@
 .ie \n(.g .ds Aq \(aq
 .el .ds Aq '
-.TH gitwatch-rs 1  "gitwatch-rs " 
+.TH gitwatch-rs 1  "gitwatch-rs "
 .SH NAME
 gitwatch\-rs
 .SH SYNOPSIS
-\fBgitwatch\-rs\fR [\fB\-m\fR|\fB\-\-commit\-message\fR] [\fB\-\-commit\-message\-script\fR] [\fB\-\-commit\-on\-start\fR] [\fB\-\-debounce\-seconds\fR] [\fB\-\-dry\-run\fR] [\fB\-i\fR|\fB\-\-ignore\-regex\fR] [\fB\-\-log\-level\fR] [\fB\-r\fR|\fB\-\-remote\fR] [\fB\-\-retries\fR] [\fB\-w\fR|\fB\-\-watch\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPOSITORY\fR] 
+\fBgitwatch\-rs\fR [\fB\-m\fR|\fB\-\-commit\-message\fR] [\fB\-\-commit\-message\-script\fR] [\fB\-\-commit\-on\-start\fR] [\fB\-\-debounce\-seconds\fR] [\fB\-\-dry\-run\fR] [\fB\-i\fR|\fB\-\-ignore\-regex\fR] [\fB\-\-log\-level\fR] [\fB\-r\fR|\fB\-\-remote\fR] [\fB\-\-retries\fR] [\fB\-w\fR|\fB\-\-watch\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPOSITORY\fR]
 .SH DESCRIPTION
 .SH OPTIONS
 .TP
@@ -33,7 +33,7 @@ Run without performing actual Git operations (staging, committing, etc.)
 .TP
 \fB\-i\fR, \fB\-\-ignore\-regex\fR=\fIIGNORE_REGEX\fR
 Regular expression pattern for files to exclude from watching.
-Matches are performed against repository\-relative file paths.
+Matching is performed against repository\-relative file paths.
 Note: the .git folder & gitignored files are ignored by default.
 Example: "\\.tmp$" to ignore temporary files.
 .TP

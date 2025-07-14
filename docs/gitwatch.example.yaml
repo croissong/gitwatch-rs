@@ -17,8 +17,8 @@ debounce_seconds: 1
 # Run without performing actual Git operations (staging, committing, etc.)
 dry_run: false
 
+# Matching is performed against repository-relative file paths.
 # Regular expression pattern for files to exclude from watching.
-# Matches are performed against repository-relative file paths.
 # Note: the .git folder & gitignored files are ignored by default.
 # Example: "\.tmp$" to ignore temporary files.
 ignore_regex: null
