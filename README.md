@@ -114,6 +114,52 @@ If you've enabled `gpgsign` globally, you might want to disable it for the watch
 
 </details>
 
+<details><summary><b>Run as systemd service</b></summary>
+
+Create a systemd user service file `gitwatch@.service`:
+```
+[Unit]
+Description=Watch a Git repository and automatically commit changes
+
+[Service]
+ExecStart=/usr/local/bin/gitwatch watch %I
+ExecStop=/bin/true
+
+[Install]
+WantedBy=default.target
+```
+
+I recommend you use it in combination with a config file, then you only need to pass the repo dir as argument:
+```sh
+systemctl --user start gitwatch@$(systemd-escape /path/to/repo/).service
+```
+   
+   
+There's also a [Nix module](nix/service.nix), which provides a home-manager service:
+```nix
+inputs = {
+   gitwatch-rs.url = "github:croissong/gitwatch-rs";
+};
+
+...
+  
+imports = [ inputs.gitwatch-rs.modules.gitwatch ];
+
+services.gitwatch = {
+  notes = {
+    repo_path = "${config.home.homeDirectory}/notes/";
+    args = [ "--log-level=debug" ];
+    extraPackages = with pkgs; [
+      bash
+      coreutils
+      git
+      aichat
+    ];
+  };
+}
+```
+
+</details>
 
 ## Installation
 
