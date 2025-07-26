@@ -16,5 +16,6 @@
       systems = import inputs.systems;
 
       imports = with builtins; map (fn: ./pkg/nix/${fn}) (attrNames (readDir ./pkg/nix));
+      flake.modules.gitwatch = nix/service.nix;
     };
 }
