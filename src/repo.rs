@@ -210,8 +210,10 @@ impl GitwatchRepo {
         if let Ok(head) = self.git_repo.head() {
             if let Ok(commit) = head.peel_to_commit() {
                 let commit_short_hash = &commit.id().to_string()[..7];
+                let dir_name = self.repo_path.file_name().unwrap().to_string_lossy();
                 info!(
-                    "Opened repository at: {} ({})",
+                    "Opened repo '{}' at commit '[{}] {}'",
+                    dir_name,
                     commit_short_hash,
                     commit.summary().unwrap_or("No commit message")
                 );
