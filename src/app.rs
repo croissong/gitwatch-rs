@@ -41,10 +41,9 @@ impl App {
 
     pub fn run(&self, shutdown_rx: Option<Receiver<()>>) -> Result<()> {
         if self.commit_on_start {
-            self.repo.process_changes().context(format!(
-                "Failed to create initial commit in repo '{}'",
-                self.repo
-            ))?;
+            self.repo
+                .process_changes()
+                .context("Failed to commit changes")?;
         }
 
         if !self.watch {
