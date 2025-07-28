@@ -101,7 +101,7 @@ impl FileWatcher {
                         }
                         retry_count += 1;
                         warn!(
-                            "Commiting changes failed, retrying ({}/{}): {}",
+                            "Failed to commit changes. Retrying... ({}/{}).\nError: {:?}",
                             retry_count, self.retry_count, e
                         );
                         thread::sleep(RETRY_DELAY);

@@ -41,10 +41,9 @@ impl App {
 
     pub fn run(&self, shutdown_rx: Option<Receiver<()>>) -> Result<()> {
         if self.commit_on_start {
-            self.repo.process_changes().context(format!(
-                "Failed to create initial commit in repo '{}'",
-                self.repo
-            ))?;
+            self.repo
+                .process_changes()
+                .context("Failed to commit changes")?;
         }
 
         if !self.watch {
@@ -125,13 +124,10 @@ mod tests {
         let app = App::new(config)?;
         let result = app.run(None);
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains(
-            format!(
-                "Failed to create initial commit in repo '{}'",
-                temp_dir.path().display()
-            )
-            .as_str()
-        ));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .eq("Failed to commit changes"));
 
         assert!(!git_repo.statuses(None)?.is_empty());
         Ok(())
