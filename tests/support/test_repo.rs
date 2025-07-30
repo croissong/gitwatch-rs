@@ -9,7 +9,7 @@ use std::{
 use std::io::Write;
 
 use anyhow::Result;
-use git2::{Repository, Signature};
+use git2::Repository;
 
 use gitwatch_rs::app_config::AppConfig;
 use tempfile::TempDir;
@@ -149,7 +149,7 @@ impl TestRepo {
         index.add_path(self.create_gitignore()?)?;
         index.write()?;
 
-        let sig = Signature::now("Test User", "test@example.com")?;
+        let sig = self.repo.signature()?;
         let tree_id = index.write_tree()?;
         let tree = self.repo.find_tree(tree_id)?;
 
