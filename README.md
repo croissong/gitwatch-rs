@@ -91,7 +91,7 @@ Options:
 
 #### Config file
 
-Most options can alternatively be configured in a `gitwatch.yml` file inside the watched repository.
+Most options can also be configured in a `gitwatch.yml` file located at the root of the watched repository.
 See [docs/gitwatch.example.yaml](docs/gitwatch.example.yaml) for reference.
 
 
