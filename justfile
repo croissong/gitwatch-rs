@@ -7,10 +7,14 @@ clippy:
 
 test:
   cargo nextest run --no-capture
+  ## test single module:
+  # cargo nextest run --no-capture repo
 
 test-coverage:
   # https://github.com/xd009642/tarpaulin/issues/1076
   cargo tarpaulin --skip-clean --engine llvm  --target-dir target-tarpaulin
+  ## test single module:
+  # cargo tarpaulin --skip-clean --engine llvm  --target-dir target-tarpaulin -- repo
 
 generate-manpage:
   cargo xtask man
