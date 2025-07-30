@@ -4,6 +4,7 @@ use std::{
 };
 
 use anyhow::{anyhow, bail, Context, Result};
+use auth_git2::GitAuthenticator;
 use git2::{Oid, Repository, Status, StatusOptions};
 use indoc::formatdoc;
 use log::{debug, info, trace, warn};
@@ -249,11 +250,12 @@ impl GitwatchRepo {
             .ok_or_else(|| anyhow!(BRANCH_ERROR))?
             .to_string();
 
+        // push current branch
         let refspec = format!("HEAD:refs/heads/{branch_name}");
         trace!("Pushing refspec: {refspec}");
 
-        // push current branch
-        remote.push(&[&refspec], None)?;
+        let auth = GitAuthenticator::default();
+        auth.push(&self.git_repo, &mut remote, &[&refspec])?;
         info!("Pushed changes to {remote_name}");
         Ok(())
     }
