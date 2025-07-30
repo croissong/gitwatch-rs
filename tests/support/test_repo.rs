@@ -149,7 +149,7 @@ impl TestRepo {
         index.add_path(self.create_gitignore()?)?;
         index.write()?;
 
-        let sig = Signature::now("Test User", "test@example.com")?;
+        let sig = self.repo.signature()?;
         let tree_id = index.write_tree()?;
         let tree = self.repo.find_tree(tree_id)?;
 

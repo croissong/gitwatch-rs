@@ -14,7 +14,7 @@ anyhow = "1.0.89"
 auth-git2 = "0.5.8"
 clap = { version = "4.5.18", features = ["derive"] }
 clap_complete = "4.5.38"
-fern = { version = "0.7.0", features = ["colored"]}
+fern = { version = "0.7.0", features = ["colored"] }
 figment = { version = "0.10.19", features = ["env", "yaml"] }
 git2 = "0.20.2"
 ignore = "0.4.23"
@@ -41,3 +41,6 @@ path = "src/lib.rs"
 [[bin]]
 name = "gitwatch"
 path = "src/main.rs"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(tarpaulin_include)'] }
