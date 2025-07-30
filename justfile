@@ -22,6 +22,5 @@ generate-manpage:
 release: generate-manpage
 
 update:
-  # requires switching to nightly in rust-toolchain.toml
-  cargo update --breaking -Z unstable-options
+  cargo upgrade
   cargo udeps

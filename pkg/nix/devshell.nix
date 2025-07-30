@@ -24,6 +24,7 @@
         ];
         packages = with pkgs; [
           bacon
+          cargo-edit
           cargo-udeps
           cargo-tarpaulin
           cargo-nextest
