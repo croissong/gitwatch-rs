@@ -31,7 +31,7 @@
           clang
         ];
 
-        LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${libPath}";
+        LD_LIBRARY_PATH = libPath;
       };
     };
 }
