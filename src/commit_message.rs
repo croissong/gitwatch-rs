@@ -8,7 +8,7 @@ pub fn generate_commit_message(script_path: &Path, repo_path: &Path) -> Result<S
         .file_name()
         .context("Failed to get script name")?
         .to_string_lossy();
-    debug!("Executing commit message script {}", file_name);
+    debug!("Executing commit message script {file_name}");
 
     let output = Command::new(script_path)
         .current_dir(repo_path)
