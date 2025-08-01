@@ -108,7 +108,7 @@ If you've enabled `gpgsign` globally, you might want to disable it for the watch
    # cd /path/to/repo 
    git config --local include.path ../.gitconfig
    ```
- 2. Create a .gitconfig file (which can be committed):
+2. Create a .gitconfig file (which can be committed):
    ```gitconfig
    [commit]
      gpgsign = false
@@ -119,7 +119,7 @@ If you've enabled `gpgsign` globally, you might want to disable it for the watch
 <details><summary><b>Run as systemd service</b></summary>
 
 Create a systemd user service file `gitwatch@.service`:
-```
+```ini
 [Unit]
 Description=Watch a Git repository and automatically commit changes
 
@@ -169,11 +169,10 @@ services.gitwatch = {
 
 A [flake.nix](./flake.nix) is available for Nix:
 ```nix
-  inputs = {
-    gitwatch-rs.url = "github:croissong/gitwatch-rs";
-  };
-  # Reference the package as `inputs.gitwatch-rs.packages.<system>.default`
-}
+inputs = {
+  gitwatch-rs.url = "github:croissong/gitwatch-rs";
+};
+# Reference the package as `inputs.gitwatch-rs.packages.<system>.default`
 ```
 
 </details>
@@ -200,7 +199,7 @@ paru -S gitwatch-rs-bin
 
 <details><summary><b>Cargo</b></summary>
 
-Install from [crates.io](https://crates.io/crates/gitwatch-rs):
+[crates.io](https://crates.io/crates/gitwatch-rs):
 ```sh
 cargo install gitwatch-rs
 ```
@@ -210,7 +209,7 @@ cargo install gitwatch-rs
 
 <details><summary><b>Docker</b></summary>
 
-Docker images are published to the [ghcr.io/croissong/gitwatch-rs](https://github.com/croissong/gitwatch-rs/pkgs/container/gitwatch-rs):
+[ghcr.io/croissong/gitwatch-rs](https://github.com/croissong/gitwatch-rs/pkgs/container/gitwatch-rs):
 ```sh
 docker run -v /path/to/repo:/repo ghcr.io/croissong/gitwatch-rs:latest /repo
 ```
