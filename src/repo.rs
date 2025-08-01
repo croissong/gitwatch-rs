@@ -32,7 +32,7 @@ impl GitwatchRepo {
         dry_run: bool,
         remote: Option<String>,
     ) -> Result<Self> {
-        debug!("Using git repository '{}'", repo_path.display());
+        debug!("Opening git repository {}", repo_path.display());
         let repo = Repository::open(repo_path)?;
         let gitwatch_repo = Self {
             git_repo: repo,
@@ -130,7 +130,7 @@ impl GitwatchRepo {
             .context("Creating git commit failed")?;
         let commit_short_hash = &commit_id.to_string()[..7];
         info!(
-            "Created commit: {} '{}'",
+            "Created commit '[{}] {}'",
             commit_short_hash,
             commit_message.lines().next().unwrap()
         );
@@ -211,9 +211,13 @@ impl GitwatchRepo {
         if let Ok(head) = self.git_repo.head() {
             if let Ok(commit) = head.peel_to_commit() {
                 let commit_short_hash = &commit.id().to_string()[..7];
-                let dir_name = self.repo_path.file_name().unwrap().to_string_lossy();
+                let dir_name = self
+                    .repo_path
+                    .file_name()
+                    .context("Failed to get repo name")?
+                    .to_string_lossy();
                 info!(
-                    "Opened repo '{}' at commit '[{}] {}'",
+                    "Opened repo {} at commit '[{}] {}'",
                     dir_name,
                     commit_short_hash,
                     commit.summary().unwrap_or("No commit message")
@@ -257,9 +261,9 @@ impl GitwatchRepo {
         let branch_name = self
             .git_repo
             .head()
-            .with_context(|| ERROR)?
+            .context(ERROR)?
             .shorthand()
-            .with_context(|| ERROR)?
+            .context(ERROR)?
             .to_string();
         Ok(format!("HEAD:refs/heads/{branch_name}"))
     }
@@ -276,7 +280,7 @@ impl GitwatchRepo {
     fn validate_remote(&self) -> Result<()> {
         if let Some(remote_name) = &self.remote {
             if self.git_repo.find_remote(remote_name).is_err() {
-                bail!("Remote '{}' not found in repository", remote_name);
+                bail!("Remote '{}' not found", remote_name);
             }
         }
         Ok(())

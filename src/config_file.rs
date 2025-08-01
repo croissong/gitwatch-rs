@@ -28,7 +28,7 @@ impl ConfigFile {
     pub fn load(repo_path: &Path) -> Result<Self> {
         let config_path = repo_path.join("gitwatch.yaml");
         if config_path.exists() {
-            debug!("Using config file '{}'", config_path.display());
+            debug!("Using config file gitwatch.yaml");
             Ok(Figment::new()
                 .merge(Yaml::file(config_path))
                 .merge(Env::prefixed("GITWATCH_"))

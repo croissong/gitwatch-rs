@@ -4,10 +4,12 @@ use std::path::Path;
 use std::process::Command;
 
 pub fn generate_commit_message(script_path: &Path, repo_path: &Path) -> Result<String> {
-    debug!(
-        "Executing commit message script '{}'",
-        script_path.display()
-    );
+    let file_name = script_path
+        .file_name()
+        .context("Failed to get script name")?
+        .to_string_lossy();
+    debug!("Executing commit message script {}", file_name);
+
     let output = Command::new(script_path)
         .current_dir(repo_path)
         .output()
