@@ -181,8 +181,9 @@ A [flake.nix](./flake.nix) is available for Nix:
 
 <details><summary><b>Arch Linux</b></summary>
 
+[AUR package](https://aur.archlinux.org/packages/gitwatch-rs-bin)
 ```sh
-# TODO: Add AUR package installation instructions
+paru -S gitwatch-rs-bin
 ```
 
 </details>
@@ -191,7 +192,7 @@ A [flake.nix](./flake.nix) is available for Nix:
 <details><summary><b>Ubuntu</b></summary>
 
 ```sh
-# TODO: Add Ubuntu package installation instructions
+# TODO: Add Ubuntu package
 ```
 
 </details>
