@@ -40,6 +40,7 @@ gitwatch watch /path/to/repo --commit-message "Auto commit"
 
 I use gitwatch to watch my local notes repository and generate commit messages using [aichat](https://github.com/sigoden/aichat).  
 The [example](example/) folder contains a small repository demonstrating this use case:
+
 <img src="docs/example.png" alt="Example use case">
 
 </details>
