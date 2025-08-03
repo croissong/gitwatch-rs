@@ -6,6 +6,7 @@
 [![codecov](https://codecov.io/gh/croissong/gitwatch-rs/graph/badge.svg?token=UBV2B6146B)](https://codecov.io/gh/croissong/gitwatch-rs)
 [![GitHub Release](https://img.shields.io/github/v/release/croissong/gitwatch-rs)](https://github.com/croissong/gitwatch-rs/releases/latest)
 [![crates](https://img.shields.io/crates/v/gitwatch-rs.svg)](https://crates.io/crates/gitwatch-rs)
+[![Packaging status](https://repology.org/badge/tiny-repos/gitwatch-rs.svg)](https://repology.org/project/gitwatch-rs/versions)
 
 </div>
 
