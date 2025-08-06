@@ -1,5 +1,3 @@
 target*
 result
 /example/.git/
-/pkg/arch/
-!/pkg/arch/PKGBUILD

@@ -28,6 +28,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
 
+
   docker:
     runs-on: ubuntu-latest
     permissions:
@@ -49,3 +50,25 @@ jobs:
         with:
           push: true
           tags: ghcr.io/croissong/gitwatch-rs:latest
+
+
+
+  aur-publish:
+    needs: [assets]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate PKGBUILD
+        run: ./pkg/arch/generate-pkgbuild.sh
+
+      - name: Publish AUR package
+        uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
+        with:
+          pkgname: my-awesome-package
+          pkgbuild: ./pkg/arch/PKGBUILD
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_USERNAME }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: Update AUR package
+          ssh_keyscan_types: ed25519

@@ -24,3 +24,7 @@ release: generate-manpage
 update:
   cargo upgrade
   cargo udeps
+
+
+generate-arch-pkgbuild:
+  pkg/arch/generate-pkgbuild.sh

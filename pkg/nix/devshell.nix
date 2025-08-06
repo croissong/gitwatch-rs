@@ -29,6 +29,7 @@
           cargo-tarpaulin
           cargo-nextest
           clang
+          minijinja
         ];
 
         LD_LIBRARY_PATH = libPath;
