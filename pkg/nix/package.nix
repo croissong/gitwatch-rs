@@ -24,8 +24,9 @@
       rust-project.crates."gitwatch-rs" = {
         crane.args = {
           buildInputs = with pkgs; [
-            openssl
+            # for dynamic linking
             libgit2
+            openssl
           ];
 
           nativeBuildInputs = with pkgs; [

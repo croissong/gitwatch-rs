@@ -30,7 +30,10 @@ jobs:
           tar: unix
           zip: windows
           token: ${{ secrets.GITHUB_TOKEN }}
-
+        env:
+          # force static linking
+          LIBGIT2_NO_VENDOR: 0
+          OPENSSL_STATIC: 1
 
 
   docker:
