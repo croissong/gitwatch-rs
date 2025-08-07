@@ -45,7 +45,7 @@
           '';
 
           meta = {
-            description = "Watch a Git repository and automatically commit changes";
+            description = "CLI to watch a local git repo and automatically commit changes";
             mainProgram = "gitwatch";
             homepage = "https://github.com/croissong/gitwatch-rs";
             license = lib.licenses.mit;

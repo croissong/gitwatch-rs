@@ -1,7 +1,7 @@
 <div align="center">
 
 <h1>gitwatch-rs</h1>
-<em>Watch a Git repository and automatically commit changes</em><br/><br/>
+<em>Watch a local Git repository and automatically commit changes</em><br/><br/>
 
 [![codecov](https://codecov.io/gh/croissong/gitwatch-rs/graph/badge.svg?token=UBV2B6146B)](https://codecov.io/gh/croissong/gitwatch-rs)
 [![GitHub Release](https://img.shields.io/github/v/release/croissong/gitwatch-rs)](https://github.com/croissong/gitwatch-rs/releases/latest)
