@@ -1,4 +1,22 @@
 # Changelog
+## [0.1.2](https://github.com/croissong/gitwatch-rs/compare/v0.1.1...v0.1.2) - 2025-08-08
+
+### Dependencies
+- chore(deps): bump notify-debouncer-full from 0.5.0 to 0.6.0
+- chore(deps): bump clap from 4.5.42 to 4.5.43
+- chore(deps): bump rust from 1.82-slim to 1.88-slim ([#25](https://github.com/croissong/gitwatch-rs/pull/25))
+- chore(deps): update codecov-action to latest version
+
+### Other
+- build: include maintainer in arch pkg & docker image
+- build(docker): improve dockerfile
+- docs: tweak package description
+- docs(readme): add repology badge
+- docs: minor tweaks
+- build(arch): update arch package & change to bin pkg
+- docs: update example.png
+- docs: add crate badge to readme
+
 
 ## [0.1.1](https://github.com/croissong/gitwatch-rs/compare/v0.1.0...v0.1.1) - 2025-07-31
 
