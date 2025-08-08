@@ -50,6 +50,8 @@ jobs:
           tags: |
             type=raw,value=latest
             type=semver,pattern={{version}}
+          labels: |
+            maintainer=$MAINTAINER_EMAIL
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
