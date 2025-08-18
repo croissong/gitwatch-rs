@@ -20,7 +20,7 @@ jobs:
           - macos-latest
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: moonrepo/setup-rust@v1
         with:
           bins: cargo-nextest
