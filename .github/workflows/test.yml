@@ -3,11 +3,8 @@ name: Test
 permissions:
   contents: read
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: push
+
 
 jobs:
   test:
@@ -16,8 +13,9 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-latest
           - macos-latest
+        # Add multiple runs
+        run: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +23,6 @@ jobs:
         with:
           bins: cargo-nextest
         env:
-          # avoid rate limiting
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run tests
         run: cargo nextest run
