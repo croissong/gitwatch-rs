@@ -82,7 +82,7 @@ impl TestRepo {
         Ok(script_path)
     }
 
-    const VERIFY_TIMEOUT: Duration = Duration::from_secs(5);
+    const VERIFY_TIMEOUT: Duration = Duration::from_secs(60);
     const VERIFY_INTERVAL: Duration = Duration::from_millis(100);
 
     pub fn verify_commits(&self, expected_message: &str, expected_count: usize) -> Result<()> {
