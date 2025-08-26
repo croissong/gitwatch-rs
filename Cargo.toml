@@ -22,7 +22,7 @@ indoc = "2.0.6"
 log = "0.4.27"
 notify-debouncer-full = "0.6.0"
 paris = { version = "1.5", features = ["macros", "no_logger"] }
-regex = "1.11.1"
+regex = "1.11.2"
 serde = { version = "1.0", features = ["derive"] }
 serde_regex = "1.1.0"
 shellexpand = "3.1.1"
