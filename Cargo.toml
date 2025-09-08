@@ -19,7 +19,7 @@ figment = { version = "0.10.19", features = ["env", "yaml"] }
 git2 = "0.20.2"
 ignore = "0.4.23"
 indoc = "2.0.6"
-log = "0.4.27"
+log = "0.4.28"
 notify-debouncer-full = "0.6.0"
 paris = { version = "1.5", features = ["macros", "no_logger"] }
 regex = "1.11.2"
