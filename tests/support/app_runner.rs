@@ -13,9 +13,10 @@ impl AppRunner {
         let (tx, rx) = std::sync::mpsc::channel();
         let handle = thread::spawn(move || {
             app.run(Some(rx))?;
-            thread::sleep(Duration::from_millis(500));
+            thread::sleep(Duration::from_millis(200));
             Ok(())
         });
+        thread::sleep(Duration::from_millis(300));
 
         Self {
             handle,
