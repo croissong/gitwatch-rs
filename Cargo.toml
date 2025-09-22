@@ -10,10 +10,10 @@ description = "CLI to watch a git repo and automatically commit changes"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.99"
+anyhow = "1.0.100"
 auth-git2 = "0.5.8"
-clap = { version = "4.5.47", features = ["derive"] }
-clap_complete = "4.5.57"
+clap = { version = "4.5.48", features = ["derive"] }
+clap_complete = "4.5.58"
 fern = { version = "0.7.1", features = ["colored"] }
 figment = { version = "0.10.19", features = ["env", "yaml"] }
 git2 = "0.20.2"
