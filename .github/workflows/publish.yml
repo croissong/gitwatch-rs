@@ -22,7 +22,7 @@ jobs:
             os: macos-latest
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: taiki-e/upload-rust-binary-action@v1
         with:
           bin: gitwatch
@@ -76,7 +76,7 @@ jobs:
     needs: [assets]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Generate PKGBUILD
         run: ./pkg/arch/generate-pkgbuild.sh
