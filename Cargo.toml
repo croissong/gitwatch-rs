@@ -16,10 +16,10 @@ clap = { version = "4.5.53", features = ["derive"] }
 clap_complete = "4.5.61"
 fern = { version = "0.7.1", features = ["colored"] }
 figment = { version = "0.10.19", features = ["env", "yaml"] }
-git2 = "0.20.2"
+git2 = "0.20.3"
 ignore = "0.4.25"
 indoc = "2.0.7"
-log = "0.4.28"
+log = "0.4.29"
 notify-debouncer-full = "0.6.0"
 paris = { version = "1.5", features = ["macros", "no_logger"] }
 regex = "1.12.2"
