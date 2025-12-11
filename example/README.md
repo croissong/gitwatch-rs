@@ -1,6 +1,8 @@
 ## Example repo
 
-This repository shows how the tool can be used to watch a plaintext notes repository. 
+This repository shows how gitwatch can be used to watch a local plaintext notes repository and automatically generate commit messages using [aichat](https://github.com/sigoden/aichat) via a custom [commit message script](./gitwatch-commit-message.sh). 
+
+<img src="../docs/example.png" alt="Example use case">
 
 ### Usage
 
@@ -12,7 +14,9 @@ git init && \
   git commit -am "initial commit"
 ```
 
-Run gitwatch, using the configuration from [gitwatch.yml](gitwatch.yml)
+Run gitwatch (the [local config file](./gitwatch.yaml) is automatically used):
 ```sh
-cargo run watch --log-level=debug
+gitwatch watch --log-level=debug
+# or
+gitwatch watch --log-level=debug
 ```

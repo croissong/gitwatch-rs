@@ -1,2 +1,3 @@
-commit_message_script: gitwatch.sh
+commit_message_script: gitwatch-commit-message.sh
 debounce_seconds: 3
+# remote: origin
