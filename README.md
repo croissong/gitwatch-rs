@@ -220,7 +220,7 @@ docker run -v /path/to/repo:/repo ghcr.io/croissong/gitwatch-rs:latest /repo
 
 <details><summary><b>Binaries</b></summary>
 
-Precompiled binaries are available for Linux and macOS from [releases](https://github.com/croissong/gitwatch-rs/releases).
+Precompiled binaries are available for Linux and macOS from the [release page](https://github.com/croissong/gitwatch-rs/releases).
 
 </details>
  
