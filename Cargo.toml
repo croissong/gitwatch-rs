@@ -12,8 +12,8 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.100"
 auth-git2 = "0.5.8"
-clap = { version = "4.5.53", features = ["derive"] }
-clap_complete = "4.5.62"
+clap = { version = "4.5.54", features = ["derive"] }
+clap_complete = "4.5.64"
 fern = { version = "0.7.1", features = ["colored"] }
 figment = { version = "0.10.19", features = ["env", "yaml"] }
 git2 = "0.20.3"
