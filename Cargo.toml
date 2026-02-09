@@ -10,9 +10,9 @@ description = "CLI to watch a git repo and automatically commit changes"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.100"
+anyhow = "1.0.101"
 auth-git2 = "0.5.8"
-clap = { version = "4.5.56", features = ["derive"] }
+clap = { version = "4.5.57", features = ["derive"] }
 clap_complete = "4.5.65"
 fern = { version = "0.7.1", features = ["colored"] }
 figment = { version = "0.10.19", features = ["env", "yaml"] }
@@ -22,7 +22,7 @@ indoc = "2.0.7"
 log = "0.4.29"
 notify-debouncer-full = "0.7.0"
 paris = { version = "1.5", features = ["macros", "no_logger"] }
-regex = "1.12.2"
+regex = "1.12.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_regex = "1.1.0"
 shellexpand = "3.1.1"
@@ -30,7 +30,7 @@ shellexpand = "3.1.1"
 [dev-dependencies]
 assert_cmd = "2.1.2"
 predicates = "3.1.3"
-rand = "0.9.2"
+rand = "0.10.0"
 tempfile = "3.24.0"
 testresult = "0.4.1"
 
