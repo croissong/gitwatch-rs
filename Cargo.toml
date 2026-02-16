@@ -12,8 +12,8 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.101"
 auth-git2 = "0.5.8"
-clap = { version = "4.5.57", features = ["derive"] }
-clap_complete = "4.5.65"
+clap = { version = "4.5.58", features = ["derive"] }
+clap_complete = "4.5.66"
 fern = { version = "0.7.1", features = ["colored"] }
 figment = { version = "0.10.19", features = ["env", "yaml"] }
 git2 = "0.20.4"
@@ -29,9 +29,9 @@ shellexpand = "3.1.1"
 
 [dev-dependencies]
 assert_cmd = "2.1.2"
-predicates = "3.1.3"
+predicates = "3.1.4"
 rand = "0.10.0"
-tempfile = "3.24.0"
+tempfile = "3.25.0"
 testresult = "0.4.1"
 
 [lib]
