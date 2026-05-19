@@ -14,8 +14,10 @@
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
-
-      imports = with builtins; map (fn: ./pkg/nix/${fn}) (attrNames (readDir ./pkg/nix));
+      imports = [
+        ./nix/devshell.nix
+        ./pkg/nix/package.nix
+      ];
       flake.modules.gitwatch = nix/service.nix;
     };
 }
