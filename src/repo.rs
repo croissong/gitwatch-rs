@@ -163,14 +163,11 @@ impl GitwatchRepo {
 
     fn get_staged_file_paths(&self) -> Result<Vec<String>> {
         let statuses = self.get_statuses()?;
-        let mut staged_file_paths = Vec::new();
-        for entry in statuses.iter() {
-            if entry.status().is_index_new() || entry.status().is_index_modified() {
-                if let Some(path) = entry.path() {
-                    staged_file_paths.push(path.to_string());
-                }
-            }
-        }
+        let staged_file_paths = statuses
+            .iter()
+            .filter(|entry| entry.status().is_index_new() || entry.status().is_index_modified())
+            .filter_map(|entry| entry.path().ok().map(|p| p.to_string()))
+            .collect();
         Ok(staged_file_paths)
     }
 
@@ -220,7 +217,11 @@ impl GitwatchRepo {
                     "Opened repo {} at commit '[{}] {}'",
                     dir_name,
                     commit_short_hash,
-                    commit.summary().unwrap_or("No commit message")
+                    commit
+                        .summary()
+                        .ok()
+                        .flatten()
+                        .unwrap_or("No commit message")
                 );
             }
         }
