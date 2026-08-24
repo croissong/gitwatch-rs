@@ -53,6 +53,7 @@ impl TestRepo {
             retries: 0,
             commit_on_start: true,
             watch: false,
+            pull_before_push: false,
             remote: None,
         }
     }
@@ -67,6 +68,53 @@ impl TestRepo {
         let file_path = self.dir.path().join(path);
         fs::remove_file(file_path)?;
         Ok(())
+    }
+
+    /// Push the current branch to the remote, so it has a common history
+    pub fn push_to_remote(&self) -> Result<()> {
+        let branch = self.current_branch()?;
+        self.repo
+            .find_remote("origin")?
+            .push(&[&format!("refs/heads/{branch}:refs/heads/{branch}")], None)?;
+        Ok(())
+    }
+
+    /// Add a commit to the remote, as another clone of the repo would
+    pub fn commit_to_remote(&self, file_name: &str, content: &str, message: &str) -> Result<()> {
+        let clone_dir = tempfile::tempdir()?;
+        let clone = Repository::clone(&self.remote.path().to_string_lossy(), clone_dir.path())?;
+
+        let mut config = clone.config()?;
+        config.set_str("user.name", "Other User")?;
+        config.set_str("user.email", "other@example.com")?;
+
+        fs::write(clone_dir.path().join(file_name), content)?;
+        let mut index = clone.index()?;
+        index.add_path(Path::new(file_name))?;
+        index.write()?;
+        let tree = clone.find_tree(index.write_tree()?)?;
+
+        let signature = clone.signature()?;
+        let parent = clone.head()?.peel_to_commit()?;
+        clone.commit(
+            Some("HEAD"),
+            &signature,
+            &signature,
+            message,
+            &tree,
+            &[&parent],
+        )?;
+
+        let branch = clone.head()?.shorthand().expect("branch name").to_string();
+        clone
+            .find_remote("origin")?
+            .push(&[&format!("refs/heads/{branch}:refs/heads/{branch}")], None)?;
+        Ok(())
+    }
+
+    fn current_branch(&self) -> Result<String> {
+        let head = self.repo.head()?;
+        Ok(head.shorthand().expect("branch name").to_string())
     }
 
     pub fn create_test_script(&self) -> Result<std::path::PathBuf> {
