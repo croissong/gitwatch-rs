@@ -31,6 +31,11 @@ remote: null
 # Use -1 for infinite retries.
 retries: 3
 
+# Skip committing while a merge, rebase, cherry-pick,
+# revert or bisect is in progress.
+# Prevents gitwatch from committing unresolved conflicts.
+skip_if_merging: false
+
 # Enable continuous monitoring of filesystem changes.
 # Set to false for one-time commit of current changes.
 watch: true

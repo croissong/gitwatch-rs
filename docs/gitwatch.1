@@ -4,7 +4,7 @@
 .SH NAME
 gitwatch\-rs
 .SH SYNOPSIS
-\fBgitwatch\-rs\fR [\fB\-m\fR|\fB\-\-commit\-message\fR] [\fB\-\-commit\-message\-script\fR] [\fB\-\-commit\-on\-start\fR] [\fB\-\-debounce\-seconds\fR] [\fB\-\-dry\-run\fR] [\fB\-i\fR|\fB\-\-ignore\-regex\fR] [\fB\-\-log\-level\fR] [\fB\-r\fR|\fB\-\-remote\fR] [\fB\-\-retries\fR] [\fB\-w\fR|\fB\-\-watch\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPOSITORY\fR] 
+\fBgitwatch\-rs\fR [\fB\-m\fR|\fB\-\-commit\-message\fR] [\fB\-\-commit\-message\-script\fR] [\fB\-\-commit\-on\-start\fR] [\fB\-\-debounce\-seconds\fR] [\fB\-\-dry\-run\fR] [\fB\-i\fR|\fB\-\-ignore\-regex\fR] [\fB\-\-log\-level\fR] [\fB\-r\fR|\fB\-\-remote\fR] [\fB\-\-retries\fR] [\fB\-\-skip\-if\-merging\fR] [\fB\-w\fR|\fB\-\-watch\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPOSITORY\fR] 
 .SH DESCRIPTION
 .SH OPTIONS
 .TP
@@ -51,6 +51,11 @@ Example: "origin".
 \fB\-\-retries\fR=\fIRETRIES\fR [default: 3]
 Number of retry attempts when errors occur.
 Use \-1 for infinite retries.
+.TP
+\fB\-\-skip\-if\-merging\fR
+Skip committing while a merge, rebase, cherry\-pick,
+revert or bisect is in progress.
+Prevents gitwatch from committing unresolved conflicts.
 .TP
 \fB\-w\fR, \fB\-\-watch\fR=\fIWATCH\fR [default: true]
 Enable continuous monitoring of filesystem changes.

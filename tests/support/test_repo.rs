@@ -54,6 +54,7 @@ impl TestRepo {
             commit_on_start: true,
             watch: false,
             remote: None,
+            skip_if_merging: false,
         }
     }
 
@@ -66,6 +67,13 @@ impl TestRepo {
     pub fn delete_file(&self, path: &str) -> Result<()> {
         let file_path = self.dir.path().join(path);
         fs::remove_file(file_path)?;
+        Ok(())
+    }
+
+    /// Simulate an ongoing merge by writing MERGE_HEAD
+    pub fn start_merge(&self) -> Result<()> {
+        let head = self.repo.head()?.peel_to_commit()?.id();
+        fs::write(self.repo.path().join("MERGE_HEAD"), format!("{head}\n"))?;
         Ok(())
     }
 
