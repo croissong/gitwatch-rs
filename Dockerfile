@@ -1,4 +1,4 @@
-FROM rust:1.97 as builder
+FROM rust:1.98 as builder
 WORKDIR /src
 
 RUN apt-get update && apt-get install -y \
@@ -11,7 +11,7 @@ RUN cargo install --path .
 
 
 
-FROM rust:1.97-slim
+FROM rust:1.98-slim
 
 COPY --from=builder /usr/local/cargo/bin/gitwatch /usr/local/bin/gitwatch
 
