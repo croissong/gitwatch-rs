@@ -1,6 +1,6 @@
 [package]
 name = "gitwatch-rs"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["jan.moeller0@pm.me"]
 repository = "https://github.com/croissong/gitwatch-rs"
 keywords = ["git", "autocommit"]
