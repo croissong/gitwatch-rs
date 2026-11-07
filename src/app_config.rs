@@ -14,6 +14,7 @@ pub struct AppConfig {
     pub remote: Option<String>,
     pub repository: PathBuf,
     pub retries: i32,
+    pub skip_if_merging: bool,
     pub watch: bool,
 }
 
@@ -84,6 +85,10 @@ impl AppConfig {
 
         let retries = file_config.retries.unwrap_or(cli_config.retries);
 
+        let skip_if_merging = file_config
+            .skip_if_merging
+            .unwrap_or(cli_config.skip_if_merging);
+
         let watch = file_config.watch.unwrap_or(cli_config.watch);
 
         Ok(Self {
@@ -96,6 +101,7 @@ impl AppConfig {
             ignore_regex,
             remote,
             retries,
+            skip_if_merging,
             watch,
         })
     }
@@ -171,6 +177,7 @@ mod tests {
                 && self.dry_run == other.dry_run
                 && self.retries == other.retries
                 && self.commit_on_start == other.commit_on_start
+                && self.skip_if_merging == other.skip_if_merging
                 && self.watch == other.watch
         }
     }
@@ -191,6 +198,7 @@ mod tests {
             "--watch=true",
             "--dry-run",
             "--remote=origin",
+            "--skip-if-merging",
         ]);
 
         let config = AppConfig::new(watch_opts)?;
@@ -206,6 +214,7 @@ mod tests {
             commit_on_start: false,
             watch: true,
             remote: Some("origin".to_string()),
+            skip_if_merging: true,
         };
 
         assert_eq!(config, expected);
@@ -252,6 +261,7 @@ mod tests {
             retries: 3,
             dry_run: false,
             remote: None,
+            skip_if_merging: false,
         };
         assert!(valid_config.validate().is_ok());
 
@@ -353,6 +363,7 @@ mod tests {
             retries: 3,
             dry_run: false,
             remote: None,
+            skip_if_merging: false,
             log_level: LogLevel::Info,
         };
 
@@ -384,6 +395,7 @@ mod tests {
             retries: 3,
             dry_run: false,
             remote: None,
+            skip_if_merging: false,
             log_level: LogLevel::Info,
         };
 
@@ -409,6 +421,7 @@ mod tests {
         assert_eq!(config.ignore_regex.unwrap().as_str(), "cli_ignore.*");
         assert_eq!(config.remote.unwrap(), "cli_remote");
         assert_eq!(config.retries, 3);
+        assert!(!config.skip_if_merging);
         assert!(config.watch);
 
         Ok(())
@@ -431,6 +444,7 @@ mod tests {
         assert_eq!(config.ignore_regex.unwrap().as_str(), "file_ignore.*");
         assert_eq!(config.remote.unwrap(), "file_remote");
         assert_eq!(config.retries, 5);
+        assert!(config.skip_if_merging);
         assert!(!config.watch);
 
         Ok(())
@@ -477,6 +491,7 @@ mod tests {
             log_level: LogLevel::Info,
             remote: Some("cli_remote".to_string()),
             retries: 3,
+            skip_if_merging: false,
             watch: true,
         })
     }
@@ -491,6 +506,7 @@ mod tests {
         log_level: "debug"
         remote: "file_remote"
         retries: 5
+        skip_if_merging: true
         watch: false
         "#;
 

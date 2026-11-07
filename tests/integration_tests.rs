@@ -148,6 +148,24 @@ fn test_ignore_regex() -> TestResult {
 }
 
 #[test]
+fn test_skip_if_merging() -> TestResult {
+    setup();
+    let test_repo = TestRepo::new()?;
+    let config = AppConfig {
+        skip_if_merging: true,
+        ..test_repo.default_app_config()
+    };
+    let app = App::new(config)?;
+
+    test_repo.start_merge()?;
+    test_repo.write_file(TEST_FILE_NAME, TEST_FILE_CONTENT)?;
+    app.run(None)?;
+
+    test_repo.verify_commits(TEST_COMMIT_MESSAGE, 0)?;
+    Ok(())
+}
+
+#[test]
 fn test_dry_run() -> TestResult {
     setup();
     let test_repo = TestRepo::new()?;

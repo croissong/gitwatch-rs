@@ -5,7 +5,7 @@ use std::{
 
 use anyhow::{bail, Context, Result};
 use auth_git2::GitAuthenticator;
-use git2::{Oid, Repository, Status, StatusOptions};
+use git2::{Oid, Repository, RepositoryState, Status, StatusOptions};
 use indoc::formatdoc;
 use log::{debug, info, trace, warn};
 use paris::formatter::colorize_string;
@@ -19,6 +19,7 @@ pub struct GitwatchRepo {
     dry_run: bool,
     ignore_regex: Option<Regex>,
     remote: Option<String>,
+    skip_if_merging: bool,
     git_repo: Repository,
     repo_path: PathBuf,
 }
@@ -31,6 +32,7 @@ impl GitwatchRepo {
         ignore_regex: Option<Regex>,
         dry_run: bool,
         remote: Option<String>,
+        skip_if_merging: bool,
     ) -> Result<Self> {
         debug!("Opening git repository {}", repo_path.display());
         let repo = Repository::open(repo_path)?;
@@ -42,6 +44,7 @@ impl GitwatchRepo {
             dry_run,
             ignore_regex,
             remote,
+            skip_if_merging,
         };
         gitwatch_repo.validate_commit_message_script()?;
         gitwatch_repo.validate_remote()?;
@@ -54,6 +57,14 @@ impl GitwatchRepo {
     }
 
     pub fn process_changes(&self) -> Result<()> {
+        if self.skip_if_merging && self.is_merging() {
+            debug!(
+                "Skipping commit - repository is in state {:?}",
+                self.git_repo.state()
+            );
+            return Ok(());
+        }
+
         let has_staged_changes = self.stage_changes().context("Failed to stage changes")?;
         if !has_staged_changes {
             debug!("Working tree clean");
@@ -141,6 +152,10 @@ impl GitwatchRepo {
         }
 
         Ok(())
+    }
+
+    fn is_merging(&self) -> bool {
+        self.git_repo.state() != RepositoryState::Clean
     }
 
     fn is_path_ignored(&self, path: &Path) -> bool {
@@ -356,6 +371,7 @@ mod tests {
             None,
             false,
             None,
+            false,
         );
         assert!(result.is_err());
         let err_str = result.err().unwrap().to_string();
@@ -377,6 +393,7 @@ mod tests {
             None,
             false,
             None,
+            false,
         );
         assert!(result.is_err());
         let err = result.err().unwrap();
@@ -395,6 +412,7 @@ mod tests {
             None,
             false,
             Some("nonexistent-remote".to_string()),
+            false,
         );
         assert!(result.is_err());
         let err_str = result.err().unwrap().to_string();
@@ -415,6 +433,7 @@ mod tests {
             None,
             false,
             Some("origin".to_string()),
+            false,
         )?;
 
         // commit with empty index
@@ -439,6 +458,79 @@ mod tests {
     }
 
     #[test]
+    fn test_skip_if_merging() -> TestResult {
+        let temp_dir = init_test_repo()?;
+        let repo = GitwatchRepo::new(
+            temp_dir.path(),
+            Some("test".to_string()),
+            None,
+            None,
+            false,
+            None,
+            true,
+        )?;
+        create_initial_commit(temp_dir.path(), &repo.git_repo)?;
+        let head_before = repo.git_repo.head()?.peel_to_commit()?.id();
+
+        // simulate an ongoing merge
+        fs::write(
+            repo.git_repo.path().join("MERGE_HEAD"),
+            format!("{head_before}\n"),
+        )?;
+        assert!(repo.is_merging());
+
+        fs::write(temp_dir.path().join("foo.txt"), "test content")?;
+        repo.process_changes()?;
+
+        assert_eq!(
+            repo.git_repo.head()?.peel_to_commit()?.id(),
+            head_before,
+            "No commit should have been created while merging"
+        );
+        assert!(
+            !repo.has_staged_changes()?,
+            "Changes should not even be staged while merging"
+        );
+
+        // without the flag, the very same state is committed
+        let repo = GitwatchRepo::new(
+            temp_dir.path(),
+            Some("test".to_string()),
+            None,
+            None,
+            false,
+            None,
+            false,
+        )?;
+        repo.process_changes()?;
+        assert_ne!(
+            repo.git_repo.head()?.peel_to_commit()?.id(),
+            head_before,
+            "Commit should have been created with skip_if_merging disabled"
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn test_is_merging_during_rebase() -> TestResult {
+        let temp_dir = init_test_repo()?;
+        let repo = GitwatchRepo::new(
+            temp_dir.path(),
+            Some("test".to_string()),
+            None,
+            None,
+            false,
+            None,
+            true,
+        )?;
+        assert!(!repo.is_merging());
+
+        fs::create_dir(repo.git_repo.path().join("rebase-merge"))?;
+        assert!(repo.is_merging());
+        Ok(())
+    }
+
+    #[test]
     fn test_ignore_regex() -> Result<()> {
         let temp_dir = init_test_repo()?;
         let repo = GitwatchRepo::new(
@@ -448,6 +540,7 @@ mod tests {
             Some(Regex::new(".*foo.txt.*")?),
             false,
             None,
+            false,
         )?;
 
         fs::write(temp_dir.path().join("foo.txt"), "test content")?;

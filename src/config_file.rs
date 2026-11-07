@@ -21,6 +21,7 @@ pub struct ConfigFile {
     pub ignore_regex: Option<Regex>,
     pub remote: Option<String>,
     pub retries: Option<i32>,
+    pub skip_if_merging: Option<bool>,
     pub watch: Option<bool>,
 }
 
@@ -56,6 +57,7 @@ mod tests {
                 && self.dry_run == other.dry_run
                 && self.retries == other.retries
                 && self.commit_on_start == other.commit_on_start
+                && self.skip_if_merging == other.skip_if_merging
                 && self.watch == other.watch
         }
     }
@@ -78,6 +80,7 @@ mod tests {
         ignore_regex: "test.*"
         remote: "origin"
         retries: 3
+        skip_if_merging: true
         watch: true
         "#;
 
@@ -96,6 +99,7 @@ mod tests {
         assert_eq!(config.ignore_regex.as_ref().unwrap().as_str(), "test.*");
         assert_eq!(config.remote, Some("origin".to_string()));
         assert_eq!(config.retries, Some(3));
+        assert_eq!(config.skip_if_merging, Some(true));
         assert_eq!(config.watch, Some(true));
 
         Ok(())
