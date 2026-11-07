@@ -31,6 +31,10 @@ remote: null
 # Use -1 for infinite retries.
 retries: 3
 
+# Path to the SSH private key to authenticate with.
+# Disables the SSH agent, so a locked agent cannot block the push.
+ssh_key: null
+
 # Enable continuous monitoring of filesystem changes.
 # Set to false for one-time commit of current changes.
 watch: true

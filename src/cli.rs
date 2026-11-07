@@ -72,6 +72,11 @@ pub struct CliOptions {
     #[clap(long = "retries", default_value = "3", verbatim_doc_comment)]
     pub retries: i32,
 
+    /// Path to the SSH private key to authenticate with.
+    /// Disables the SSH agent, so a locked agent cannot block the push.
+    #[clap(long = "ssh-key", verbatim_doc_comment)]
+    pub ssh_key: Option<PathBuf>,
+
     /// Enable continuous monitoring of filesystem changes.
     /// Set to false for one-time commit of current changes.
     #[clap(

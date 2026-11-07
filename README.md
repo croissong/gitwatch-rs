@@ -85,6 +85,9 @@ Options:
       --retries <RETRIES>
           Number of retry attempts when errors occur.
           Use -1 for infinite retries. [default: 3]
+      --ssh-key <SSH_KEY>
+          Path to the SSH private key to authenticate with.
+          Disables the SSH agent, so a locked agent cannot block the push.
   -w, --watch <WATCH>
           Enable continuous monitoring of filesystem changes.
           Set to false for one-time commit of current changes. [default: true] [possible values: true, false]
