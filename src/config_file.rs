@@ -21,6 +21,7 @@ pub struct ConfigFile {
     pub ignore_regex: Option<Regex>,
     pub remote: Option<String>,
     pub retries: Option<i32>,
+    pub ssh_key: Option<PathBuf>,
     pub watch: Option<bool>,
 }
 
@@ -78,6 +79,7 @@ mod tests {
         ignore_regex: "test.*"
         remote: "origin"
         retries: 3
+        ssh_key: "key"
         watch: true
         "#;
 
@@ -96,6 +98,7 @@ mod tests {
         assert_eq!(config.ignore_regex.as_ref().unwrap().as_str(), "test.*");
         assert_eq!(config.remote, Some("origin".to_string()));
         assert_eq!(config.retries, Some(3));
+        assert_eq!(config.ssh_key, Some(PathBuf::from("key")));
         assert_eq!(config.watch, Some(true));
 
         Ok(())

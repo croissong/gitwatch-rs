@@ -14,6 +14,7 @@ pub struct AppConfig {
     pub remote: Option<String>,
     pub repository: PathBuf,
     pub retries: i32,
+    pub ssh_key: Option<PathBuf>,
     pub watch: bool,
 }
 
@@ -84,6 +85,15 @@ impl AppConfig {
 
         let retries = file_config.retries.unwrap_or(cli_config.retries);
 
+        let ssh_key = file_config
+            .ssh_key
+            .or(cli_config.ssh_key)
+            .map(|key_path| {
+                normalize_path(&key_path)
+                    .context(format!("Invalid SSH key path '{}'", key_path.display()))
+            })
+            .transpose()?;
+
         let watch = file_config.watch.unwrap_or(cli_config.watch);
 
         Ok(Self {
@@ -96,6 +106,7 @@ impl AppConfig {
             ignore_regex,
             remote,
             retries,
+            ssh_key,
             watch,
         })
     }
@@ -110,6 +121,12 @@ impl AppConfig {
                 "Repository path does not exist: {}",
                 self.repository.display()
             );
+        }
+
+        if let Some(key_path) = &self.ssh_key {
+            if !key_path.is_file() {
+                bail!("SSH key path is not a file: {}", key_path.display());
+            }
         }
 
         match (&self.commit_message, &self.commit_message_script) {
@@ -203,6 +220,7 @@ mod tests {
             ignore_regex: Some(Regex::new("/ignore-me/.*")?),
             dry_run: true,
             retries: 2,
+            ssh_key: None,
             commit_on_start: false,
             watch: true,
             remote: Some("origin".to_string()),
@@ -234,6 +252,36 @@ mod tests {
     }
 
     #[test]
+    fn test_config_missing_ssh_key() -> TestResult {
+        let temp_dir = tempfile::tempdir()?;
+        let missing_key = temp_dir.path().join("no-such-key");
+        let opts = CliOptions::parse_from([
+            "gitwatch",
+            temp_dir.path().to_str().unwrap(),
+            "--commit-message",
+            TEST_COMMIT_MESSAGE,
+            "--ssh-key",
+            missing_key.to_str().unwrap(),
+        ]);
+
+        let err = AppConfig::new(opts).unwrap_err().to_string();
+        assert!(err.contains("Invalid SSH key path"), "{err}");
+
+        let opts = CliOptions::parse_from([
+            "gitwatch",
+            temp_dir.path().to_str().unwrap(),
+            "--commit-message",
+            TEST_COMMIT_MESSAGE,
+            "--ssh-key",
+            temp_dir.path().to_str().unwrap(),
+        ]);
+        let err = AppConfig::new(opts).unwrap_err().to_string();
+        assert!(err.contains("SSH key path is not a file"), "{err}");
+
+        Ok(())
+    }
+
+    #[test]
     fn test_config_validation() -> TestResult {
         let temp_dir = tempfile::tempdir()?;
         let repo_path = temp_dir.path().to_path_buf();
@@ -250,6 +298,7 @@ mod tests {
             ignore_regex: None,
             watch: true,
             retries: 3,
+            ssh_key: None,
             dry_run: false,
             remote: None,
         };
@@ -351,6 +400,7 @@ mod tests {
             ignore_regex: None,
             watch: true,
             retries: 3,
+            ssh_key: None,
             dry_run: false,
             remote: None,
             log_level: LogLevel::Info,
@@ -382,6 +432,7 @@ mod tests {
             ignore_regex: None,
             watch: true,
             retries: 3,
+            ssh_key: None,
             dry_run: false,
             remote: None,
             log_level: LogLevel::Info,
@@ -477,6 +528,7 @@ mod tests {
             log_level: LogLevel::Info,
             remote: Some("cli_remote".to_string()),
             retries: 3,
+            ssh_key: None,
             watch: true,
         })
     }
