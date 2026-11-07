@@ -4,8 +4,8 @@ use assert_cmd::Command;
 use gitwatch_rs::{app::App, app_config::AppConfig, cli::LogLevel, logger::setup_logger};
 use regex::Regex;
 use support::{
-    AppRunner, TestRepo, IGNORED_FILE_NAME, TEST_COMMIT_MESSAGE, TEST_FILE_CONTENT, TEST_FILE_NAME,
-    TEST_GENERATED_COMMIT_MESSAGE, TEST_REMOTE,
+    AppRunner, TestRepo, IGNORED_FILE_NAME, REMOTE_COMMIT_MESSAGE, TEST_COMMIT_MESSAGE,
+    TEST_FILE_CONTENT, TEST_FILE_NAME, TEST_GENERATED_COMMIT_MESSAGE, TEST_REMOTE,
 };
 use testresult::TestResult;
 
@@ -218,6 +218,38 @@ fn test_push() -> TestResult {
         "Remote commit message doesn't match"
     );
 
+    Ok(())
+}
+
+#[test]
+fn test_pull_before_push() -> TestResult {
+    setup();
+
+    let test_repo = TestRepo::new()?;
+    test_repo.push_to_remote()?;
+    test_repo.commit_to_remote("remote.txt", "remote content", REMOTE_COMMIT_MESSAGE)?;
+
+    let config = AppConfig {
+        remote: Some(TEST_REMOTE.to_string()),
+        pull_before_push: true,
+        ..test_repo.default_app_config()
+    };
+    let app = App::new(config)?;
+
+    test_repo.write_file(TEST_FILE_NAME, TEST_FILE_CONTENT)?;
+    app.run(None)?;
+
+    // the local commit was rebased on top of the remote one and pushed
+    let remote_head = test_repo.remote.head()?.peel_to_commit()?;
+    assert_eq!(remote_head.message().unwrap_or(""), TEST_COMMIT_MESSAGE);
+    assert_eq!(
+        remote_head.parent(0)?.message().unwrap_or(""),
+        REMOTE_COMMIT_MESSAGE
+    );
+    assert_eq!(remote_head.parent_count(), 1, "History should stay linear");
+
+    // the remote change is now present locally
+    assert!(test_repo.dir.path().join("remote.txt").exists());
     Ok(())
 }
 

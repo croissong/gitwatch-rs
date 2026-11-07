@@ -23,6 +23,11 @@ dry_run: false
 # Example: "\.tmp$" to ignore temporary files.
 ignore_regex: null
 
+# Pull from the remote before pushing (requires a remote to be set).
+# Fetches the current branch and rebases the local commits on top of it,
+# so a remote that has moved ahead does not break the push.
+pull_before_push: false
+
 # Name of the remote to push to (if specified)
 # Example: "origin"
 remote: null

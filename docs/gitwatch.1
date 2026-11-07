@@ -4,7 +4,7 @@
 .SH NAME
 gitwatch\-rs
 .SH SYNOPSIS
-\fBgitwatch\-rs\fR [\fB\-m\fR|\fB\-\-commit\-message\fR] [\fB\-\-commit\-message\-script\fR] [\fB\-\-commit\-on\-start\fR] [\fB\-\-debounce\-seconds\fR] [\fB\-\-dry\-run\fR] [\fB\-i\fR|\fB\-\-ignore\-regex\fR] [\fB\-\-log\-level\fR] [\fB\-r\fR|\fB\-\-remote\fR] [\fB\-\-retries\fR] [\fB\-w\fR|\fB\-\-watch\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPOSITORY\fR] 
+\fBgitwatch\-rs\fR [\fB\-m\fR|\fB\-\-commit\-message\fR] [\fB\-\-commit\-message\-script\fR] [\fB\-\-commit\-on\-start\fR] [\fB\-\-debounce\-seconds\fR] [\fB\-\-dry\-run\fR] [\fB\-i\fR|\fB\-\-ignore\-regex\fR] [\fB\-\-log\-level\fR] [\fB\-\-pull\-before\-push\fR] [\fB\-r\fR|\fB\-\-remote\fR] [\fB\-\-retries\fR] [\fB\-w\fR|\fB\-\-watch\fR] [\fB\-h\fR|\fB\-\-help\fR] [\fIREPOSITORY\fR] 
 .SH DESCRIPTION
 .SH OPTIONS
 .TP
@@ -43,6 +43,11 @@ Set the log level
 
 .br
 [\fIpossible values: \fRtrace, debug, info, warn, error]
+.TP
+\fB\-\-pull\-before\-push\fR
+Pull from the remote before pushing (requires \-\-remote).
+Fetches the current branch and rebases the local commits on top of it,
+so a remote that has moved ahead does not break the push.
 .TP
 \fB\-r\fR, \fB\-\-remote\fR=\fIREMOTE\fR
 Name of the remote to push to (if specified).

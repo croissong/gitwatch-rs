@@ -11,13 +11,14 @@ use log::{debug, info, trace, warn};
 use paris::formatter::colorize_string;
 use regex::Regex;
 
-use crate::commit_message::generate_commit_message;
+use crate::{commit_message::generate_commit_message, pull::pull_rebase};
 
 pub struct GitwatchRepo {
     commit_message: Option<String>,
     commit_message_script: Option<PathBuf>,
     dry_run: bool,
     ignore_regex: Option<Regex>,
+    pull_before_push: bool,
     remote: Option<String>,
     git_repo: Repository,
     repo_path: PathBuf,
@@ -30,6 +31,7 @@ impl GitwatchRepo {
         commit_message_script: Option<PathBuf>,
         ignore_regex: Option<Regex>,
         dry_run: bool,
+        pull_before_push: bool,
         remote: Option<String>,
     ) -> Result<Self> {
         debug!("Opening git repository {}", repo_path.display());
@@ -41,6 +43,7 @@ impl GitwatchRepo {
             commit_message_script,
             dry_run,
             ignore_regex,
+            pull_before_push,
             remote,
         };
         gitwatch_repo.validate_commit_message_script()?;
@@ -136,6 +139,10 @@ impl GitwatchRepo {
         );
 
         if let Some(remote) = &self.remote {
+            if self.pull_before_push {
+                pull_rebase(&self.git_repo, remote)
+                    .context(format!("Failed to pull from remote '{remote}'"))?;
+            }
             self.push_changes(remote)
                 .context(format!("Failed to push to remote '{remote}'"))?;
         }
@@ -355,6 +362,7 @@ mod tests {
             None,
             None,
             false,
+            false,
             None,
         );
         assert!(result.is_err());
@@ -376,6 +384,7 @@ mod tests {
             Some(PathBuf::from("/nonexistent/script")),
             None,
             false,
+            false,
             None,
         );
         assert!(result.is_err());
@@ -393,6 +402,7 @@ mod tests {
             Some("test".to_string()),
             None,
             None,
+            false,
             false,
             Some("nonexistent-remote".to_string()),
         );
@@ -413,6 +423,7 @@ mod tests {
             Some("test".to_string()),
             None,
             None,
+            false,
             false,
             Some("origin".to_string()),
         )?;
@@ -446,6 +457,7 @@ mod tests {
             Some("test".to_string()),
             None,
             Some(Regex::new(".*foo.txt.*")?),
+            false,
             false,
             None,
         )?;

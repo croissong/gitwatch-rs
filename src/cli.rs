@@ -62,6 +62,16 @@ pub struct CliOptions {
     #[arg(long, value_enum, default_value_t = LogLevel::Info)]
     pub log_level: LogLevel,
 
+    /// Pull from the remote before pushing (requires --remote).
+    /// Fetches the current branch and rebases the local commits on top of it,
+    /// so a remote that has moved ahead does not break the push.
+    #[clap(
+        long = "pull-before-push",
+        default_value = "false",
+        verbatim_doc_comment
+    )]
+    pub pull_before_push: bool,
+
     /// Name of the remote to push to (if specified).
     /// Example: "origin".
     #[clap(short = 'r', long = "remote", verbatim_doc_comment)]

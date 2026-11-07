@@ -5,6 +5,7 @@ pub mod commit_message;
 pub mod config_file;
 pub mod filter;
 pub mod logger;
+pub mod pull;
 pub mod repo;
 pub mod util;
 pub mod watcher;
