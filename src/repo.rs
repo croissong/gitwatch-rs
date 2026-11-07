@@ -1,6 +1,13 @@
 use std::{
     fmt::{self, Display, Formatter},
     path::{Path, PathBuf},
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        mpsc::{self, RecvTimeoutError},
+        Arc,
+    },
+    thread,
+    time::Duration,
 };
 
 use anyhow::{bail, Context, Result};
@@ -13,6 +20,10 @@ use regex::Regex;
 
 use crate::commit_message::generate_commit_message;
 
+/// libssh2 has no timeout of its own, so a remote or SSH agent that never
+/// answers would block the push forever.
+const PUSH_TIMEOUT: Duration = Duration::from_secs(60);
+
 pub struct GitwatchRepo {
     commit_message: Option<String>,
     commit_message_script: Option<PathBuf>,
@@ -21,6 +32,9 @@ pub struct GitwatchRepo {
     remote: Option<String>,
     git_repo: Repository,
     repo_path: PathBuf,
+    /// A timed-out push cannot be cancelled, so no new push starts until it returns.
+    push_in_flight: Arc<AtomicBool>,
+    push_timeout: Duration,
 }
 
 impl GitwatchRepo {
@@ -42,6 +56,8 @@ impl GitwatchRepo {
             dry_run,
             ignore_regex,
             remote,
+            push_in_flight: Arc::new(AtomicBool::new(false)),
+            push_timeout: PUSH_TIMEOUT,
         };
         gitwatch_repo.validate_commit_message_script()?;
         gitwatch_repo.validate_remote()?;
@@ -244,14 +260,43 @@ impl GitwatchRepo {
 
     fn push_changes(&self, remote_name: &str) -> Result<()> {
         debug!("Pushing to remote {remote_name}");
-        let mut remote = self.git_repo.find_remote(remote_name)?;
 
         // push current branch
         let refspec = self.get_current_refspec()?;
         trace!("Pushing refspec: {refspec}");
 
-        let auth = GitAuthenticator::default();
-        auth.push(&self.git_repo, &mut remote, &[&refspec])?;
+        if self.push_in_flight.swap(true, Ordering::SeqCst) {
+            bail!("Previous push to {remote_name} has not returned yet");
+        }
+
+        // the thread opens its own handle, because `Repository` cannot be shared between threads
+        let repo_path = self.git_repo.path().to_path_buf();
+        let remote = remote_name.to_string();
+        let in_flight = Arc::clone(&self.push_in_flight);
+        let (tx, rx) = mpsc::channel();
+        thread::spawn(move || {
+            let result = (|| {
+                let repo = Repository::open(repo_path)?;
+                let mut remote = repo.find_remote(&remote)?;
+                GitAuthenticator::default().push(&repo, &mut remote, &[&refspec])?;
+                anyhow::Ok(())
+            })();
+            in_flight.store(false, Ordering::SeqCst);
+            // Fails only if the push timed out and nobody is listening any more.
+            let _ = tx.send(result);
+        });
+
+        match rx.recv_timeout(self.push_timeout) {
+            Ok(result) => result?,
+            Err(RecvTimeoutError::Timeout) => bail!(
+                "Push to {remote_name} did not finish within {:?}; it keeps running in the background",
+                self.push_timeout
+            ),
+            Err(RecvTimeoutError::Disconnected) => {
+                self.push_in_flight.store(false, Ordering::SeqCst);
+                bail!("Push to {remote_name} panicked")
+            }
+        }
         info!("Pushed changes to {remote_name}");
         Ok(())
     }
@@ -307,6 +352,7 @@ mod tests {
     use super::*;
 
     static INIT: Once = Once::new();
+    const TEST_PUSH_TIMEOUT: Duration = Duration::from_millis(500);
 
     fn init_test_repo() -> Result<TempDir> {
         INIT.call_once(|| {
@@ -343,6 +389,43 @@ mod tests {
             &tree,
             &[],
         )?;
+        Ok(())
+    }
+
+    #[test]
+    fn test_push_times_out_instead_of_hanging() -> TestResult {
+        let listener = std::net::TcpListener::bind("127.0.0.1:0")?;
+        let port = listener.local_addr()?.port();
+        thread::spawn(move || listener.incoming().collect::<Vec<_>>());
+
+        let temp_dir = init_test_repo()?;
+        let git_repo = Repository::open(temp_dir.path())?;
+        create_initial_commit(temp_dir.path(), &git_repo)?;
+        git_repo.remote_set_url("origin", &format!("ssh://git@127.0.0.1:{port}/x.git"))?;
+
+        let mut repo = GitwatchRepo::new(
+            temp_dir.path(),
+            Some("test".to_string()),
+            None,
+            None,
+            false,
+            Some("origin".to_string()),
+        )?;
+        repo.push_timeout = TEST_PUSH_TIMEOUT;
+
+        fs::write(temp_dir.path().join("a.txt"), "a")?;
+        let err = repo.process_changes().unwrap_err();
+        assert!(
+            format!("{err:#}").contains("did not finish within"),
+            "Unexpected error: {err:#}"
+        );
+
+        fs::write(temp_dir.path().join("b.txt"), "b")?;
+        let err = repo.process_changes().unwrap_err();
+        assert!(
+            format!("{err:#}").contains("has not returned yet"),
+            "Unexpected error: {err:#}"
+        );
         Ok(())
     }
 
